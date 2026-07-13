@@ -1,0 +1,65 @@
+---
+interface Props {
+  href?: string;
+  type?: 'button' | 'submit';
+  variant?: 'cta' | 'secondary' | 'ghost';
+  fullWidth?: boolean;
+  disabled?: boolean;
+  class?: string;
+}
+
+const {
+  href,
+  type = 'button',
+  variant = 'cta',
+  fullWidth = false,
+  disabled = false,
+  class: className,
+} = Astro.props;
+
+const baseClasses =
+  'inline-flex items-center justify-center text-center font-brand-body font-semibold no-underline cursor-pointer rounded-[var(--radius-pill)] transition-[transform,box-shadow,background-color,color,border-color,opacity] duration-[var(--duration-base)] ease-[var(--ease-default)]';
+
+const variantClasses: Record<'cta' | 'secondary' | 'ghost', string> = {
+  cta: 'bg-[image:var(--gradient-cta)] text-[var(--color-text-inverse)] px-[var(--space-8)] py-[var(--space-4)] shadow-[var(--shadow-cta)] hover:translate-y-[var(--hover-lift)] hover:shadow-[var(--shadow-cta-hover)]',
+  secondary:
+    'bg-[var(--color-sky)] text-[var(--color-text)] px-[var(--space-8)] py-[var(--space-4)] shadow-[var(--shadow-sm)] hover:translate-y-[var(--hover-lift)] hover:shadow-[var(--shadow-hover)]',
+  ghost:
+    'bg-transparent text-[var(--color-text)] px-[var(--space-6)] py-[var(--space-3)] hover:bg-[var(--color-blush-light)]',
+};
+
+const disabledClasses = 'opacity-60 pointer-events-none';
+---
+
+{
+  href ? (
+    <a
+      class:list={[
+        baseClasses,
+        variantClasses[variant],
+        fullWidth && 'w-full',
+        disabled && disabledClasses,
+        className,
+      ]}
+      href={href}
+      aria-disabled={disabled ? 'true' : undefined}
+      tabindex={disabled ? -1 : undefined}
+    >
+      <slot />
+    </a>
+  ) : (
+    <button
+      class:list={[
+        baseClasses,
+        variantClasses[variant],
+        fullWidth && 'w-full',
+        disabled && disabledClasses,
+        className,
+      ]}
+      type={type}
+      disabled={disabled}
+    >
+      <slot />
+    </button>
+  )
+}

@@ -1,0 +1,132 @@
+---
+// Модальное окно регистрации. По клику на любой CTA «Забрать место»
+// (a[href="#registration"] или кнопка в секции #registration) открывается
+// поповер, в который лениво (при первом открытии) монтируется внешний
+// виджет-форма GetCourse. До первого открытия внешняя сеть не задействуется.
+---
+
+<div
+  data-registration-modal
+  data-open="false"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Регистрация на марафон «Здоровье без таблеток»"
+  aria-hidden="true"
+  class="fixed inset-0 z-[60] flex items-center justify-center p-[var(--gutter)] transition-[opacity,visibility] duration-[var(--duration-base)] ease-[var(--ease-default)] motion-reduce:transition-none data-[open=false]:pointer-events-none data-[open=false]:invisible data-[open=false]:opacity-0 data-[open=true]:visible data-[open=true]:opacity-100"
+>
+  <div
+    data-registration-backdrop
+    class="absolute inset-0 bg-[color-mix(in_srgb,var(--color-surface-dark-deep)_72%,transparent)]"
+  >
+  </div>
+
+  <div
+    class="relative z-[1] flex max-h-[90vh] w-full max-w-[var(--container-narrow)] flex-col overflow-hidden rounded-[var(--radius-xl)] bg-[image:var(--gradient-warm-cool)] shadow-[var(--shadow-lg)]"
+  >
+    <button
+      type="button"
+      data-registration-close
+      aria-label="Закрыть окно регистрации"
+      class="absolute right-[var(--space-3)] top-[var(--space-3)] z-[2] flex h-[var(--space-10)] w-[var(--space-10)] flex-none items-center justify-center rounded-full bg-[var(--color-blush-light)] text-[length:var(--fs-lg)] leading-none text-[var(--color-rose-deep)] transition-[background-color] duration-[var(--duration-base)] ease-[var(--ease-default)] motion-reduce:transition-none hover:bg-[var(--color-blush)]"
+    >
+      <span aria-hidden="true">✕</span>
+    </button>
+
+    <div class="min-h-0 flex-1 overflow-y-auto">
+      <div class="px-[var(--space-6)] pb-[var(--space-5)] pt-[var(--space-8)] text-center">
+        <p class="font-brand-body text-[length:var(--fs-xs)] font-bold uppercase tracking-[var(--ls-wider)] text-[var(--color-rose-deep)]">
+          Бесплатный марафон
+        </p>
+        <h2 class="mt-[var(--space-2)] font-brand-heading text-[length:var(--fs-lg)] font-extrabold tracking-[var(--ls-tight)] text-[var(--color-text)]">
+          Здоровье без таблеток<br /><span class="text-[var(--color-rose-deep)]">от диагноза к профессии</span>
+        </h2>
+        <p class="mt-[var(--space-1)] font-brand-body text-[length:var(--fs-sm)] text-[var(--color-text-muted)]">
+          20–22 июля · 18:00 МСК · Бесплатно
+        </p>
+      </div>
+      <div class="px-[var(--space-5)] pb-[var(--space-8)]">
+        <div class="overflow-hidden rounded-[var(--radius-lg)] bg-[var(--color-white)] shadow-[var(--shadow-sm)]">
+          <p
+            data-registration-loading
+            class="py-[var(--space-8)] text-center font-brand-body text-[length:var(--fs-base)] text-[var(--color-text-muted)]"
+          >
+            Загружаем форму…
+          </p>
+          <div data-registration-mount></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const WIDGET_ID = 'ff0f70eedeb87ec755b99934596a776993122ae5';
+  const WIDGET_SRC = 'https://iandmyhealth.ru/pl/lite/widget/script?id=1629532';
+
+  const modal = document.querySelector<HTMLElement>('[data-registration-modal]');
+  const mount = document.querySelector<HTMLElement>('[data-registration-mount]');
+  const loading = document.querySelector<HTMLElement>('[data-registration-loading]');
+  const closeButton = document.querySelector<HTMLButtonElement>('[data-registration-close]');
+
+  if (modal && mount && closeButton) {
+    let widgetRequested = false;
+    let lastTrigger: HTMLElement | null = null;
+
+    const loadWidget = () => {
+      if (widgetRequested) return;
+      widgetRequested = true;
+      const script = document.createElement('script');
+      script.id = WIDGET_ID;
+      script.src = WIDGET_SRC;
+      script.addEventListener('load', () => {
+        // Скрипт монтируется после DOMContentLoaded, поэтому вручную запускаем
+        // его через объявленное им кастомное событие: он заменит себя на iframe
+        // внутри mount и подгонит высоту через postMessage.
+        document.dispatchEvent(new Event(`StartWidget${WIDGET_ID}`));
+        if (loading) loading.hidden = true;
+      });
+      mount.appendChild(script);
+    };
+
+    const setOpen = (open: boolean) => {
+      modal.dataset.open = String(open);
+      modal.setAttribute('aria-hidden', String(!open));
+      document.documentElement.style.overflow = open ? 'hidden' : '';
+      if (open) {
+        loadWidget();
+        closeButton.focus();
+      } else if (lastTrigger) {
+        lastTrigger.focus();
+        lastTrigger = null;
+      }
+    };
+
+    document.addEventListener('click', (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+
+      const trigger = target.closest<HTMLElement>(
+        'a[href="#registration"], #registration button, [data-registration-open]',
+      );
+      if (trigger) {
+        event.preventDefault();
+        lastTrigger = trigger;
+        setOpen(true);
+        return;
+      }
+
+      if (target.closest('[data-registration-close], [data-registration-backdrop]')) {
+        setOpen(false);
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && modal.dataset.open === 'true') setOpen(false);
+    });
+
+    const onBeforeSwap = () => {
+      document.documentElement.style.overflow = '';
+    };
+    document.addEventListener('astro:before-swap', onBeforeSwap, { once: true });
+  }
+</script>

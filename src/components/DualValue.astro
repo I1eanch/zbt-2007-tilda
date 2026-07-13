@@ -1,0 +1,123 @@
+---
+import SectionLabel from './ui/SectionLabel.astro';
+---
+
+<section id="dual-value" class="border-b border-[var(--color-border)]">
+  <div class="mx-auto max-w-[var(--container)] px-[var(--gutter)] py-[var(--space-14)]">
+    <SectionLabel>Два результата за три дня</SectionLabel>
+    <h2
+      class="mb-[var(--space-5)] mt-[var(--space-3)] font-brand-heading text-[length:var(--fs-xl)] font-bold leading-[var(--lh-snug)] text-[var(--color-text)]"
+    >
+      Восстановите здоровье — и узнайте, как на этом зарабатывают
+    </h2>
+
+    <div
+      class="mb-[var(--space-6)] grid grid-cols-1 gap-[var(--space-4)] min-[700px]:grid-cols-2"
+      data-animate="stagger"
+    >
+      <div
+        class="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-blush-pale)] px-[var(--space-5)] py-[var(--space-7)]"
+      >
+        <div class="mb-[var(--space-3)]">
+          <svg
+            viewBox="0 0 48 48"
+            width="48"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <circle cx="24" cy="24" r="22" fill="#fce8e8"></circle>
+            <path
+              d="M24 14 C24 10 32 10 32 16 C32 24 24 28 24 28 C24 28 16 24 16 16 C16 10 24 10 24 14 Z"
+              fill="#e0627a"
+              opacity="0.4"></path>
+          </svg>
+        </div>
+        <h3
+          class="mb-[var(--space-2)] font-brand-heading text-[length:var(--fs-base)] font-bold text-[var(--color-text)]"
+        >
+          Для вашего здоровья
+        </h3>
+        <p
+          class="font-brand-body text-[length:var(--fs-base)] leading-[var(--lh-relaxed)] text-[var(--color-text-muted)]"
+        >
+          Поймёте, почему вам плохо, хотя «анализы в норме». Получите конкретные инструменты:
+          правильная тарелка, работающие добавки, карта симптомов. Начнёте восстановление прямо
+          во время марафона.
+        </p>
+      </div>
+
+      <div
+        class="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-sky-pale)] px-[var(--space-5)] py-[var(--space-7)]"
+      >
+        <div class="mb-[var(--space-3)]">
+          <svg
+            viewBox="0 0 48 48"
+            width="48"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+            focusable="false"
+          >
+            <circle cx="24" cy="24" r="22" fill="#e8f4fc"></circle>
+            <path
+              d="M14 30 L20 22 L28 26 L36 14"
+              fill="none"
+              stroke="#4a9cc9"
+              stroke-width="2.5"
+              stroke-linecap="round"></path>
+            <circle cx="36" cy="14" r="3" fill="#7bbde0"></circle>
+          </svg>
+        </div>
+        <h3
+          class="mb-[var(--space-2)] font-brand-heading text-[length:var(--fs-base)] font-bold text-[var(--color-text)]"
+        >
+          Для вашей карьеры и дохода
+        </h3>
+        <p
+          class="font-brand-body text-[length:var(--fs-base)] leading-[var(--lh-relaxed)] text-[var(--color-text-muted)]"
+        >
+          Узнаете, как люди зарабатывают от $800 до $5 000 в месяц на нутрициологии. Попробуете
+          себя в роли нутрициолога на реальном кейсе. Поймёте, подходит ли вам это — и как начать.
+        </p>
+      </div>
+    </div>
+
+    <div
+      class="flex flex-wrap items-center justify-center gap-[var(--space-5)] rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-white)] px-[var(--space-7)] py-[var(--space-6)]"
+      data-animate="reveal"
+    >
+      <div class="min-w-[140px] flex-1 text-center">
+        <div
+          class="font-brand-heading text-[length:var(--fs-xl)] font-extrabold text-[var(--color-rose-deep)]"
+        >
+          $800–5 000
+        </div>
+        <div class="font-brand-body text-[length:var(--fs-xs)] text-[var(--color-text-subtle)]">
+          в месяц зарабатывают нутрициологи удалённо
+        </div>
+      </div>
+      <div class="h-10 w-px bg-[var(--color-border)]" aria-hidden="true"></div>
+      <div class="min-w-[140px] flex-1 text-center">
+        <div
+          class="font-brand-heading text-[length:var(--fs-xl)] font-extrabold text-[var(--color-rose-deep)]"
+        >
+          Удалённо
+        </div>
+        <div class="font-brand-body text-[length:var(--fs-xs)] text-[var(--color-text-subtle)]">
+          из любой точки мира, свой график
+        </div>
+      </div>
+      <div class="h-10 w-px bg-[var(--color-border)]" aria-hidden="true"></div>
+      <div class="min-w-[140px] flex-1 text-center">
+        <div
+          class="font-brand-heading text-[length:var(--fs-xl)] font-extrabold text-[var(--color-rose-deep)]"
+        >
+          $400+ млрд
+        </div>
+        <div class="font-brand-body text-[length:var(--fs-xs)] text-[var(--color-text-subtle)]">
+          мировой рынок, дефицит специалистов
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

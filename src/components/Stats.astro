@@ -1,0 +1,28 @@
+---
+import { stats } from '../content/landing';
+---
+
+<section id="stats" class="border-b border-[var(--color-border)]">
+  <div class="mx-auto max-w-[var(--container)] px-[var(--gutter)] py-[var(--space-14)]">
+    <div
+      class="grid grid-cols-1 gap-[var(--space-4)] min-[700px]:grid-cols-3"
+      data-animate="stagger"
+    >
+      {
+        stats.map((stat) => (
+          <div
+            data-stat
+            class="rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-white)] px-[var(--space-5)] py-[var(--space-7)] text-center shadow-[var(--shadow-sm)]"
+          >
+            <div data-count-up class="font-brand-heading text-[length:var(--fs-2xl)] font-extrabold text-[var(--color-rose-deep)]">
+              {stat.value}
+            </div>
+            <div class="mt-[var(--space-2)] font-brand-body text-[length:var(--fs-sm)] leading-[var(--lh-normal)] text-[var(--color-text-muted)]">
+              {stat.label}
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

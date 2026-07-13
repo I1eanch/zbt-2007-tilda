@@ -1,0 +1,106 @@
+---
+import Button from './ui/Button.astro';
+import { Image } from 'astro:assets';
+import heroBackground from '../assets/hero-background.jpg';
+import heroPortrait from '../assets/hero-wellness-illustration.jpg';
+---
+<section
+  id="hero"
+  class="relative overflow-hidden px-[var(--gutter)] pt-[calc(var(--nav-height)+var(--space-8))] pb-[var(--space-10)] text-center"
+>
+  <Image
+    src={heroBackground}
+    alt=""
+    aria-hidden="true"
+    class="absolute inset-0 z-0 h-full w-full object-cover"
+    width={2752}
+    height={1536}
+    loading="eager"
+    sizes="100vw"
+    widths={[1376, 2752]}
+  />
+  <div class="absolute inset-0 z-10 bg-[image:var(--gradient-hero)] opacity-70"></div>
+  <span
+    class="relative z-20 mb-[var(--space-5)] inline-block max-w-full rounded-[var(--radius-pill)] border border-[color-mix(in_srgb,var(--color-rose)_35%,transparent)] bg-[color-mix(in_srgb,var(--color-blush)_80%,var(--color-white))] px-[var(--space-4)] py-[var(--space-3)] font-brand-body text-[length:var(--fs-sm)] font-bold uppercase tracking-[var(--ls-wide)] text-[var(--color-rose-deep)] shadow-[var(--shadow-sm)] min-[700px]:px-[var(--space-5)] min-[700px]:text-[length:var(--fs-base)] min-[700px]:tracking-[var(--ls-widest)]"
+  >
+    Бесплатный марафон · 20–22 июля
+  </span>
+
+  <div
+    class="relative z-20 mx-auto mb-[var(--space-6)] flex max-w-[var(--hero-max)] flex-col-reverse items-center justify-center gap-[var(--space-5)] min-[700px]:flex-row min-[700px]:gap-[var(--space-10)]"
+    data-animate="reveal"
+  >
+    <div class="flex-1 text-center min-[700px]:text-left">
+      <h1
+        class="font-brand-heading text-[length:var(--fs-h1)] font-extrabold uppercase leading-[var(--lh-tight)] tracking-[var(--ls-wide)] text-[var(--color-text)]"
+      >
+        ЗДОРОВЬЕ БЕЗ ТАБЛЕТОК<br /><span class="text-[var(--color-rose-deep)]"
+          >ОТ ДИАГНОЗА К ПРОФЕССИИ</span
+        >
+      </h1>
+      <div
+        class="mx-auto my-[var(--space-4)] h-[3px] w-[60px] rounded-[2px] bg-[image:var(--gradient-divider)] min-[700px]:mx-0"
+      >
+      </div>
+      <p
+        class="mb-[var(--space-6)] font-brand-body text-[length:var(--fs-base)] leading-[var(--lh-loose)] text-[var(--color-text-muted)]"
+      >
+        Три дня, за которые вы поймёте, почему вам плохо и что делать с питанием. А ещё — как
+        тысячи людей превращают знания о здоровье в профессию с доходом от $800 до $5 000 в
+        месяц из любой точки мира.
+      </p>
+      <Button href="#registration">Забрать место + 6 подарков</Button>
+    </div>
+
+    <div class="w-[240px] flex-none min-[700px]:w-[380px]">
+      <Image
+        src={heroPortrait}
+        alt="Нутрициолог за рабочим столом со здоровой едой"
+        class="h-auto w-full [mask-image:radial-gradient(ellipse_78%_82%_at_50%_44%,black_58%,transparent_100%)] [-webkit-mask-image:radial-gradient(ellipse_78%_82%_at_50%_44%,black_58%,transparent_100%)] [mask-repeat:no-repeat] [-webkit-mask-repeat:no-repeat]"
+        width={1344}
+        height={2016}
+        loading="eager"
+        sizes="(min-width: 700px) 380px, 240px"
+        widths={[240, 380, 480, 760]}
+      />
+    </div>
+  </div>
+
+  <div data-animate="stagger"
+    class="relative z-20 flex flex-col items-center justify-center gap-[var(--space-3)] min-[700px]:flex-row min-[700px]:gap-[var(--space-7)]"
+  >
+    <div
+      data-fact-item
+      class="flex items-center gap-[var(--space-3)] rounded-[var(--radius-lg)] bg-[color-mix(in_srgb,var(--color-white)_90%,transparent)] px-[var(--space-3)] py-[var(--space-2)] font-brand-body text-[length:var(--fs-base)] font-semibold text-[var(--color-text-muted)] shadow-[var(--shadow-xs)]"
+    >
+      <span
+        data-fact-icon
+        class="flex h-[var(--space-10)] w-[var(--space-10)] items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-white)_70%,transparent)] text-[length:var(--fs-base)] shadow-[var(--shadow-xs)]"
+        aria-hidden="true">📅</span
+      >
+      <span data-fact-text>20–22 июля · 18:00 МСК</span>
+    </div>
+    <div
+      data-fact-item
+      class="flex items-center gap-[var(--space-3)] rounded-[var(--radius-lg)] bg-[color-mix(in_srgb,var(--color-white)_90%,transparent)] px-[var(--space-3)] py-[var(--space-2)] font-brand-body text-[length:var(--fs-base)] font-semibold text-[var(--color-text-muted)] shadow-[var(--shadow-xs)]"
+    >
+      <span
+        data-fact-icon
+        class="flex h-[var(--space-10)] w-[var(--space-10)] items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-white)_70%,transparent)] text-[length:var(--fs-base)] shadow-[var(--shadow-xs)]"
+        aria-hidden="true">🎥</span
+      >
+      <span data-fact-text>Прямой эфир</span>
+    </div>
+    <div
+      data-fact-item
+      class="flex items-center gap-[var(--space-3)] rounded-[var(--radius-lg)] bg-[color-mix(in_srgb,var(--color-white)_90%,transparent)] px-[var(--space-3)] py-[var(--space-2)] font-brand-body text-[length:var(--fs-base)] font-semibold text-[var(--color-text-muted)] shadow-[var(--shadow-xs)]"
+    >
+      <span
+        data-fact-icon
+        class="flex h-[var(--space-10)] w-[var(--space-10)] items-center justify-center rounded-full bg-[color-mix(in_srgb,var(--color-white)_70%,transparent)] text-[length:var(--fs-base)] shadow-[var(--shadow-xs)]"
+        aria-hidden="true">🎁</span
+      >
+      <span data-fact-text>6 подарков</span>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,208 @@
+/* =========================================================================
+   Дизайн-токены школы «Ресурс»
+   Источник: лендинг марафона «Здоровье без таблеток»
+   Формат: CSS Custom Properties. Подключите файл и используйте var(--token).
+   ========================================================================= */
+
+:root {
+  /* ---------------------------------------------------------------------
+     ЦВЕТА · Небо (холодный) */
+  --color-sky:        #d4eaf7;
+  --color-sky-light:  #e8f4fc;
+  --color-sky-pale:   #f2f8fc;
+  --color-blue:       #7bbde0;
+  --color-blue-deep:  #4a9cc9;
+
+  /* ЦВЕТА · Роза (тёплый) */
+  --color-blush:       #f5d5d5;
+  --color-blush-light: #fce8e8;
+  --color-blush-pale:  #fdf3f3;
+  --color-rose:        #d4878f;
+  --color-rose-deep:   #c06b74;
+
+  /* ЦВЕТА · Акцент / действие */
+  --color-cta:        #e0627a;
+  --color-cta-light:  #f0899b;
+
+  /* ЦВЕТА · Поддержка */
+  --color-green:      #68a89a;
+
+  /* ЦВЕТА · Нейтральные / поверхности */
+  --color-white:      #ffffff;
+  --color-snow:       #fafbfd;
+  --color-border:     #e4e9ef;
+  --color-surface-dark:      #3a3a4a;
+  --color-surface-dark-deep: #2a2a38;
+
+  /* ЦВЕТА · Текст */
+  --color-text:         #2c3e50;  /* основной */
+  --color-text-muted:   #5a6d7e;  /* вторичный */
+  --color-text-subtle:  #94a3b3;  /* подписи */
+  --color-text-inverse: #ffffff;  /* на тёмном/цветном */
+
+  /* ---------------------------------------------------------------------
+     ГРАДИЕНТЫ */
+  --gradient-hero:      linear-gradient(170deg, var(--color-blush-pale) 0%, var(--color-white) 30%, var(--color-sky-light) 70%, var(--color-sky) 100%);
+  --gradient-cta:       linear-gradient(135deg, var(--color-cta), var(--color-cta-light));
+  --gradient-divider:   linear-gradient(90deg, var(--color-rose), var(--color-blue));
+  --gradient-reg-bonus: linear-gradient(170deg, var(--color-blush-pale) 0%, var(--color-white) 50%, var(--color-sky-light) 100%);
+  --gradient-form:      linear-gradient(170deg, var(--color-surface-dark) 0%, var(--color-surface-dark-deep) 100%);
+  --gradient-warm-cool: linear-gradient(135deg, var(--color-blush-pale), var(--color-sky-pale));
+
+  /* ---------------------------------------------------------------------
+     ТИПОГРАФИКА · Семейства */
+  --font-heading: 'Montserrat', sans-serif;
+  --font-body:    'Inter', sans-serif;
+
+  /* ТИПОГРАФИКА · Насыщенность */
+  --fw-light:     300;
+  --fw-regular:   400;
+  --fw-medium:    500;
+  --fw-semibold:  600;
+  --fw-bold:      700;
+  --fw-extrabold: 800;
+
+  /* ТИПОГРАФИКА · Размеры */
+  --fs-xs:      11px;
+  --fs-sm:      13px;
+  --fs-base:    15px;
+  --fs-md:      18px;
+  --fs-lg:      20px;
+  --fs-xl:      26px;
+  --fs-2xl:     34px;
+  --fs-display: 36px;
+  --fs-h1:      clamp(22px, 4vw, 34px);
+
+  /* ТИПОГРАФИКА · Межстрочный интервал */
+  --lh-tight:   1.1;
+  --lh-snug:    1.25;
+  --lh-normal:  1.5;
+  --lh-relaxed: 1.6;
+  --lh-loose:   1.75;
+
+  /* ТИПОГРАФИКА · Трекинг */
+  --ls-tight:  0.5px;
+  --ls-wide:   2px;
+  --ls-wider:  2.5px;
+  --ls-widest: 3px;
+
+  /* ---------------------------------------------------------------------
+     ОТСТУПЫ (шаг 4px) */
+  --space-0:  0;
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-7:  28px;
+  --space-8:  32px;
+  --space-9:  36px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-14: 56px;
+
+  /* ---------------------------------------------------------------------
+     СКРУГЛЕНИЯ */
+  --radius-sm:   12px;
+  --radius-md:   14px;
+  --radius-lg:   16px;
+  --radius-xl:   20px;
+  --radius-pill: 50px;
+  --radius-full: 9999px;
+
+  /* ---------------------------------------------------------------------
+     ТЕНИ */
+  --shadow-xs:        0 2px 8px rgba(0,0,0,0.06);
+  --shadow-sm:        0 2px 10px rgba(0,0,0,0.03);
+  --shadow-md:        0 4px 16px rgba(0,0,0,0.04);
+  --shadow-lg:        0 4px 20px rgba(0,0,0,0.04);
+  --shadow-hover:     0 4px 16px rgba(0,0,0,0.06);
+  --shadow-cta:       0 4px 20px rgba(224,98,122,0.3);
+  --shadow-cta-hover: 0 6px 28px rgba(224,98,122,0.4);
+  --shadow-float:     0 -2px 20px rgba(0,0,0,0.06);
+
+  /* ---------------------------------------------------------------------
+     РАСКЛАДКА */
+  --container:         720px;
+  --nav-height:        60px;
+  --container-narrow:  480px;
+  --hero-max:          900px;
+  --section-padding-y: 56px;
+  --gutter:            24px;
+  --grid-gap:          16px;
+  --breakpoint-mobile: 700px;
+
+  /* ---------------------------------------------------------------------
+     ДВИЖЕНИЕ */
+  --duration-fast: 200ms;
+  --duration-base: 300ms;
+  --ease-default:  cubic-bezier(0.4, 0, 0.2, 1);
+  --hover-lift:    -2px;
+}
+
+/* =========================================================================
+   БАЗОВЫЕ КЛАССЫ-УТИЛИТЫ (опционально)
+   Готовые компоненты на основе токенов — можно использовать как есть.
+   ========================================================================= */
+
+.btn-cta {
+  display: inline-block;
+  padding: var(--space-4) var(--space-8);
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  font-weight: var(--fw-semibold);
+  color: var(--color-text-inverse);
+  background: var(--gradient-cta);
+  border: none;
+  border-radius: var(--radius-pill);
+  text-decoration: none;
+  box-shadow: var(--shadow-cta);
+  transition:
+    transform var(--duration-base) var(--ease-default),
+    box-shadow var(--duration-base) var(--ease-default),
+    background-color var(--duration-base) var(--ease-default),
+    color var(--duration-base) var(--ease-default),
+    border-color var(--duration-base) var(--ease-default),
+    opacity var(--duration-base) var(--ease-default);
+  cursor: pointer;
+}
+.btn-cta:hover {
+  transform: translateY(var(--hover-lift));
+  box-shadow: var(--shadow-cta-hover);
+}
+
+.card {
+  background: var(--color-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lg);
+}
+
+.eyebrow {
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-wider);
+  text-transform: uppercase;
+  color: var(--color-rose);
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-bold);
+  color: var(--color-text);
+  line-height: var(--lh-snug);
+}
+
+.chip {
+  display: inline-block;
+  background: var(--color-blush-light);
+  color: var(--color-rose-deep);
+  font-size: var(--fs-xs);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--ls-tight);
+  text-transform: uppercase;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-pill);
+}

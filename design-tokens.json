@@ -1,0 +1,147 @@
+{
+  "$schema": "https://tr.designtokens.org/format/",
+  "$description": "Дизайн-токены школы «Ресурс» — на основе лендинга марафона по нутрициологии. Формат W3C Design Tokens.",
+  "color": {
+    "$description": "Палитра: пастельное небо (голубой) + пудровая роза, тёплый акцент-CTA и нейтральная типографика.",
+    "sky": {
+      "base":  { "$type": "color", "$value": "#d4eaf7", "$description": "Небесно-голубой — базовый холодный тон" },
+      "light": { "$type": "color", "$value": "#e8f4fc", "$description": "Светлый голубой — фоны карточек" },
+      "pale":  { "$type": "color", "$value": "#f2f8fc", "$description": "Бледный голубой — деликатные подложки" }
+    },
+    "blue": {
+      "base": { "$type": "color", "$value": "#7bbde0", "$description": "Голубой — иллюстрации, обводки, буллеты" },
+      "deep": { "$type": "color", "$value": "#4a9cc9", "$description": "Насыщенный голубой — акценты в графике" }
+    },
+    "blush": {
+      "base":  { "$type": "color", "$value": "#f5d5d5", "$description": "Пудровая роза — базовый тёплый тон" },
+      "light": { "$type": "color", "$value": "#fce8e8", "$description": "Светлая роза — фоны, чипы" },
+      "pale":  { "$type": "color", "$value": "#fdf3f3", "$description": "Бледная роза — секционные подложки" }
+    },
+    "rose": {
+      "base": { "$type": "color", "$value": "#d4878f", "$description": "Роза — надзаголовки, иконки, ссылки" },
+      "deep": { "$type": "color", "$value": "#c06b74", "$description": "Тёмная роза — заголовки-акценты, цифры" }
+    },
+    "accent": {
+      "cta":       { "$type": "color", "$value": "#e0627a", "$description": "Основной CTA — кнопки, ключевые действия" },
+      "cta-light": { "$type": "color", "$value": "#f0899b", "$description": "Светлый CTA — конец градиента кнопки" }
+    },
+    "support": {
+      "green": { "$type": "color", "$value": "#68a89a", "$description": "Приглушённый зелёный — эко/еда акценты в иллюстрациях" }
+    },
+    "neutral": {
+      "white": { "$type": "color", "$value": "#ffffff", "$description": "Белый — карточки, поверхности" },
+      "snow":  { "$type": "color", "$value": "#fafbfd", "$description": "Снежный — фон страницы" },
+      "border":{ "$type": "color", "$value": "#e4e9ef", "$description": "Границы, разделители" }
+    },
+    "text": {
+      "strong": { "$type": "color", "$value": "#2c3e50", "$description": "Основной текст, заголовки" },
+      "muted":  { "$type": "color", "$value": "#5a6d7e", "$description": "Вторичный текст, описания" },
+      "subtle": { "$type": "color", "$value": "#94a3b3", "$description": "Подписи, метки, приглушённое" },
+      "inverse":{ "$type": "color", "$value": "#ffffff", "$description": "Текст на тёмных/цветных поверхностях" }
+    },
+    "surface": {
+      "dark":     { "$type": "color", "$value": "#3a3a4a", "$description": "Тёмная секция формы — верх градиента" },
+      "dark-deep":{ "$type": "color", "$value": "#2a2a38", "$description": "Тёмная секция формы — низ градиента" }
+    }
+  },
+  "gradient": {
+    "hero":       { "$type": "gradient", "$value": "linear-gradient(170deg, #fdf3f3 0%, #ffffff 30%, #e8f4fc 70%, #d4eaf7 100%)", "$description": "Фон hero-секции" },
+    "cta":        { "$type": "gradient", "$value": "linear-gradient(135deg, #e0627a, #f0899b)", "$description": "Заливка кнопок" },
+    "divider":    { "$type": "gradient", "$value": "linear-gradient(90deg, #d4878f, #7bbde0)", "$description": "Декоративный разделитель роза→голубой" },
+    "reg-bonus":  { "$type": "gradient", "$value": "linear-gradient(170deg, #fdf3f3 0%, #ffffff 50%, #e8f4fc 100%)", "$description": "Фон блока бонусов" },
+    "form":       { "$type": "gradient", "$value": "linear-gradient(170deg, #3a3a4a 0%, #2a2a38 100%)", "$description": "Тёмный фон секции формы" },
+    "warm-cool":  { "$type": "gradient", "$value": "linear-gradient(135deg, #fdf3f3, #f2f8fc)", "$description": "Мягкая тёпло-холодная подложка (акцент-плашки)" }
+  },
+  "font": {
+    "family": {
+      "heading": { "$type": "fontFamily", "$value": ["Montserrat", "sans-serif"], "$description": "Заголовки, надзаголовки, цифры" },
+      "body":    { "$type": "fontFamily", "$value": ["Inter", "sans-serif"], "$description": "Основной текст, UI, кнопки" }
+    },
+    "weight": {
+      "light":     { "$type": "fontWeight", "$value": 300 },
+      "regular":   { "$type": "fontWeight", "$value": 400 },
+      "medium":    { "$type": "fontWeight", "$value": 500 },
+      "semibold":  { "$type": "fontWeight", "$value": 600 },
+      "bold":      { "$type": "fontWeight", "$value": 700 },
+      "extrabold": { "$type": "fontWeight", "$value": 800 }
+    },
+    "size": {
+      "xs":  { "$type": "dimension", "$value": "11px", "$description": "Метки, теги, надзаголовки" },
+      "sm":  { "$type": "dimension", "$value": "13px", "$description": "Подписи, мета" },
+      "base":{ "$type": "dimension", "$value": "15px", "$description": "Основной текст" },
+      "md":  { "$type": "dimension", "$value": "18px", "$description": "Подзаголовки карточек" },
+      "lg":  { "$type": "dimension", "$value": "20px", "$description": "Крупные подзаголовки" },
+      "xl":  { "$type": "dimension", "$value": "26px", "$description": "Заголовки секций" },
+      "2xl": { "$type": "dimension", "$value": "34px", "$description": "H1 максимум (clamp)" },
+      "display": { "$type": "dimension", "$value": "36px", "$description": "Крупные цифры-метрики" }
+    },
+    "lineHeight": {
+      "tight":   { "$type": "number", "$value": 1.1,  "$description": "Заголовки H1" },
+      "snug":    { "$type": "number", "$value": 1.25, "$description": "Заголовки секций" },
+      "normal":  { "$type": "number", "$value": 1.5,  "$description": "Плотный текст" },
+      "relaxed": { "$type": "number", "$value": 1.6,  "$description": "Body по умолчанию" },
+      "loose":   { "$type": "number", "$value": 1.75, "$description": "Абзацы описаний" }
+    },
+    "letterSpacing": {
+      "tight":  { "$type": "dimension", "$value": "0.5px" },
+      "wide":   { "$type": "dimension", "$value": "2px",   "$description": "Заголовки-капс, метки дней" },
+      "wider":  { "$type": "dimension", "$value": "2.5px", "$description": "Надзаголовки секций" },
+      "widest": { "$type": "dimension", "$value": "3px",   "$description": "Hero-метка" }
+    }
+  },
+  "spacing": {
+    "$description": "Шкала отступов, кратная 4px.",
+    "0":  { "$type": "dimension", "$value": "0px" },
+    "1":  { "$type": "dimension", "$value": "4px" },
+    "2":  { "$type": "dimension", "$value": "8px" },
+    "3":  { "$type": "dimension", "$value": "12px" },
+    "4":  { "$type": "dimension", "$value": "16px" },
+    "5":  { "$type": "dimension", "$value": "20px" },
+    "6":  { "$type": "dimension", "$value": "24px" },
+    "7":  { "$type": "dimension", "$value": "28px" },
+    "8":  { "$type": "dimension", "$value": "32px" },
+    "9":  { "$type": "dimension", "$value": "36px" },
+    "10": { "$type": "dimension", "$value": "40px" },
+    "12": { "$type": "dimension", "$value": "48px" },
+    "14": { "$type": "dimension", "$value": "56px" }
+  },
+  "radius": {
+    "$description": "Скругления углов.",
+    "sm":   { "$type": "dimension", "$value": "12px", "$description": "Мелкие иллюстрации-плашки" },
+    "md":   { "$type": "dimension", "$value": "14px", "$description": "Карточки боли, подарки" },
+    "lg":   { "$type": "dimension", "$value": "16px", "$description": "Карточки бонусов, метрики" },
+    "xl":   { "$type": "dimension", "$value": "20px", "$description": "Крупные карточки (hook, дни, спикер)" },
+    "pill": { "$type": "dimension", "$value": "50px", "$description": "Кнопки, инпуты, чипы" },
+    "full": { "$type": "dimension", "$value": "9999px", "$description": "Круги, аватары, иконки" }
+  },
+  "shadow": {
+    "xs":  { "$type": "shadow", "$value": "0 2px 8px rgba(0,0,0,0.06)",  "$description": "Мелкие круглые иконки" },
+    "sm":  { "$type": "shadow", "$value": "0 2px 10px rgba(0,0,0,0.03)", "$description": "Лёгкие карточки" },
+    "md":  { "$type": "shadow", "$value": "0 4px 16px rgba(0,0,0,0.04)", "$description": "Карточки бонусов" },
+    "lg":  { "$type": "shadow", "$value": "0 4px 20px rgba(0,0,0,0.04)", "$description": "Крупные карточки" },
+    "hover":{ "$type": "shadow", "$value": "0 4px 16px rgba(0,0,0,0.06)", "$description": "Ховер карточек" },
+    "cta":     { "$type": "shadow", "$value": "0 4px 20px rgba(224,98,122,0.3)", "$description": "Тень кнопки CTA" },
+    "cta-hover":{ "$type": "shadow", "$value": "0 6px 28px rgba(224,98,122,0.4)", "$description": "Ховер кнопки CTA" },
+    "float":   { "$type": "shadow", "$value": "0 -2px 20px rgba(0,0,0,0.06)", "$description": "Плавающая нижняя панель" }
+  },
+  "layout": {
+    "container":       { "$type": "dimension", "$value": "720px", "$description": "Максимальная ширина контента" },
+    "container-narrow":{ "$type": "dimension", "$value": "480px", "$description": "Ширина формы" },
+    "hero-max":        { "$type": "dimension", "$value": "900px", "$description": "Ширина hero-контента" },
+    "nav-height":      { "$type": "dimension", "$value": "60px", "$description": "Высота фиксированной шапки навигации" },
+    "section-padding-y":{ "$type": "dimension", "$value": "56px", "$description": "Вертикальные отступы секций" },
+    "gutter":          { "$type": "dimension", "$value": "24px", "$description": "Боковые поля контейнера" },
+    "grid-gap":        { "$type": "dimension", "$value": "16px", "$description": "Расстояние в сетках" },
+    "breakpoint-mobile":{ "$type": "dimension", "$value": "700px", "$description": "Переключение на мобильную раскладку" }
+  },
+  "motion": {
+    "duration": {
+      "fast":  { "$type": "duration", "$value": "200ms" },
+      "base":  { "$type": "duration", "$value": "300ms" }
+    },
+    "easing": {
+      "default": { "$type": "cubicBezier", "$value": [0.4, 0, 0.2, 1] }
+    },
+    "hover-lift": { "$type": "dimension", "$value": "-2px", "$description": "Смещение вверх при ховере" }
+  }
+}

@@ -1,0 +1,10 @@
+.git
+.github
+.astro
+dist
+node_modules
+MEMORY
+docs
+Maket.html
+Design.md
+design-tokens.json

@@ -1,0 +1,80 @@
+---
+import Button from './ui/Button.astro';
+---
+
+<div
+  data-sticky-cta
+  data-hidden="true"
+  aria-hidden="true"
+  class="fixed left-1/2 z-40 -translate-x-1/2 bottom-[calc(var(--space-4)+env(safe-area-inset-bottom,0px))] transition-[opacity,transform,visibility] duration-[var(--duration-base)] motion-reduce:transition-none data-[hidden=true]:opacity-0 data-[hidden=true]:translate-y-[var(--space-4)] data-[hidden=true]:pointer-events-none data-[hidden=true]:invisible"
+>
+  <Button href="#registration" variant="cta" class="shadow-[var(--shadow-float)]">
+    Забрать место + 6 подарков →
+  </Button>
+</div>
+
+<script>
+  const sticky = document.querySelector('[data-sticky-cta]') as HTMLElement | null;
+  const stopEl = document.querySelector('[data-sticky-stop]') as HTMLElement | null;
+  const heroEl = document.querySelector<HTMLElement>('#hero');
+
+  if (sticky && stopEl && heroEl) {
+    let heroIntersects = true;
+    let stopReached = false;
+
+    const syncHidden = () => {
+      const hidden = heroIntersects || stopReached;
+      sticky.dataset.hidden = hidden ? 'true' : 'false';
+      sticky.setAttribute('aria-hidden', hidden ? 'true' : 'false');
+
+      const link = sticky.querySelector('a, button') as HTMLAnchorElement | HTMLButtonElement | null;
+      if (link) {
+        if (hidden) {
+          link.setAttribute('tabindex', '-1');
+        } else {
+          link.removeAttribute('tabindex');
+        }
+      }
+    };
+
+    // initial true avoids flash
+    syncHidden();
+
+    let stopIO: IntersectionObserver | null = null;
+    const refreshStopObserver = () => {
+      if (stopIO) stopIO.disconnect();
+      const rectHeight = sticky.getBoundingClientRect().height;
+      const computedBottom = parseFloat(getComputedStyle(sticky).bottom) || 0;
+      const rootMargin = `0px 0px -${rectHeight + computedBottom}px 0px`;
+      stopIO = new IntersectionObserver((entries) => {
+        const entry = entries[0];
+        if (!entry) return;
+        stopReached = entry.isIntersecting || entry.boundingClientRect.top < (entry.rootBounds?.bottom ?? 0);
+        syncHidden();
+      }, { rootMargin, threshold: 0.05 });
+      stopIO.observe(stopEl);
+    };
+
+    refreshStopObserver();
+
+    const heroIO = new IntersectionObserver((entries) => {
+      const entry = entries[0];
+      if (!entry) return;
+      heroIntersects = entry.isIntersecting;
+      syncHidden();
+    }, { threshold: 0 });
+    heroIO.observe(heroEl);
+
+    const ro = new ResizeObserver(() => refreshStopObserver());
+    ro.observe(sticky);
+
+    const onBeforeSwap = () => {
+      if (stopIO) stopIO.disconnect();
+      heroIO.disconnect();
+      ro.disconnect();
+      window.removeEventListener('resize', refreshStopObserver);
+    };
+    document.addEventListener('astro:before-swap', onBeforeSwap, { once: true });
+    window.addEventListener('resize', refreshStopObserver);
+  }
+</script>

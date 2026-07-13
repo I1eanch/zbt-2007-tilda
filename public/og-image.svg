@@ -1,0 +1,98 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1200 630"
+  width="1200"
+  height="630"
+  role="img"
+  aria-label="Школа «Ресурс» — Здоровье без таблеток: от диагноза к профессии"
+>
+  <defs>
+    <linearGradient id="ogBg" x1="0" y1="0" x2="0.18" y2="1">
+      <stop offset="0" stop-color="#fdf3f3" />
+      <stop offset="0.3" stop-color="#ffffff" />
+      <stop offset="0.7" stop-color="#e8f4fc" />
+      <stop offset="1" stop-color="#d4eaf7" />
+    </linearGradient>
+    <linearGradient id="ogDivider" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#d4878f" />
+      <stop offset="1" stop-color="#7bbde0" />
+    </linearGradient>
+    <linearGradient id="ogCta" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#e0627a" />
+      <stop offset="1" stop-color="#f0899b" />
+    </linearGradient>
+    <linearGradient id="ogLeaf" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#d4878f" />
+      <stop offset="1" stop-color="#7bbde0" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#ogBg)" />
+
+  <!-- decorative accents (aria-hidden via role=img on root) -->
+  <circle cx="1070" cy="150" r="230" fill="#e8f4fc" opacity="0.55" />
+  <circle cx="1120" cy="470" r="150" fill="#fce8e8" opacity="0.5" />
+  <g transform="translate(940 70) scale(4.6)">
+    <path
+      d="M32 15 C 20 21, 15 34, 20 49 C 35 47, 48 35, 47 17 C 41 15, 36 14, 32 15 Z"
+      fill="url(#ogLeaf)"
+      opacity="0.9"
+    />
+    <path
+      d="M23 47 C 29 39, 36 30, 45 22"
+      fill="none"
+      stroke="#ffffff"
+      stroke-width="2.6"
+      stroke-linecap="round"
+    />
+  </g>
+
+  <text
+    x="90"
+    y="132"
+    font-family="'Montserrat', 'Arial', sans-serif"
+    font-size="26"
+    font-weight="700"
+    letter-spacing="4"
+    fill="#c06b74"
+  >ШКОЛА «РЕСУРС» · НУТРИЦИОЛОГИЯ</text>
+
+  <rect x="90" y="152" width="120" height="5" rx="2.5" fill="url(#ogDivider)" />
+
+  <text
+    x="88"
+    y="272"
+    font-family="'Montserrat', 'Arial', sans-serif"
+    font-size="70"
+    font-weight="800"
+    fill="#2c3e50"
+  >Здоровье без таблеток:</text>
+  <text
+    x="88"
+    y="356"
+    font-family="'Montserrat', 'Arial', sans-serif"
+    font-size="70"
+    font-weight="800"
+    fill="#2c3e50"
+  >от диагноза к профессии</text>
+
+  <text
+    x="90"
+    y="428"
+    font-family="'Inter', 'Arial', sans-serif"
+    font-size="30"
+    font-weight="500"
+    fill="#5a6d7e"
+  >Бесплатный трёхдневный онлайн-марафон школы «Ресурс»</text>
+
+  <rect x="90" y="474" width="404" height="76" rx="38" fill="url(#ogCta)" />
+  <text
+    x="292"
+    y="522"
+    text-anchor="middle"
+    font-family="'Montserrat', 'Arial', sans-serif"
+    font-size="28"
+    font-weight="700"
+    fill="#ffffff"
+  >20–22 июля · Бесплатно</text>
+</svg>

@@ -1,0 +1,62 @@
+---
+import { Image } from 'astro:assets';
+import Card from './ui/Card.astro';
+import { bonuses } from '../content/landing';
+import iconTest from '../assets/bonus-test.jpg';
+import iconRoadmap from '../assets/bonus-roadmap.jpg';
+import iconNiches from '../assets/bonus-niches.jpg';
+import iconVideo from '../assets/bonus-video.jpg';
+
+const bonusIcon = {
+  test: iconTest,
+  roadmap: iconRoadmap,
+  niches: iconNiches,
+  video: iconVideo,
+} as const;
+---
+
+<section id="bonuses" class="border-b border-[var(--color-border)] bg-[image:var(--gradient-reg-bonus)]">
+  <div class="mx-auto max-w-[var(--container)] px-[var(--gutter)] py-[var(--space-14)]">
+    <h2
+      class="mb-[var(--space-8)] text-center font-brand-heading text-[length:var(--fs-xl)] font-bold leading-[var(--lh-snug)] text-[var(--color-text)]"
+    >
+      Зарегистрируйтесь — получите <em class="not-italic text-[var(--color-rose)]">сразу</em>
+    </h2>
+
+    <ul class="grid list-none grid-cols-1 gap-[var(--space-5)] min-[700px]:grid-cols-2">
+      {
+        bonuses.map((bonus) => (
+          <Card
+            as="li"
+            tone="default"
+            interactive
+            class="flex items-start gap-[var(--space-4)] px-[var(--space-5)] py-[var(--space-5)]"
+            data-animate="reveal"
+          >
+            <div class="h-[56px] w-[56px] flex-none overflow-hidden rounded-[var(--radius-lg)]">
+              <Image
+                src={bonusIcon[bonus.icon]}
+                alt=""
+                width={112}
+                height={112}
+                class="h-full w-full object-cover"
+                loading="lazy"
+              />
+            </div>
+            <div>
+              <div class="font-brand-heading text-[length:var(--fs-base)] font-bold leading-[var(--lh-snug)] text-[var(--color-text)]">
+                {bonus.title}
+              </div>
+              <div class="mt-[var(--space-1)] font-brand-body text-[length:var(--fs-sm)] leading-[var(--lh-normal)] text-[var(--color-text-muted)]">
+                {bonus.description}
+              </div>
+              <span class="mt-[var(--space-3)] inline-block rounded-[var(--radius-pill)] bg-[var(--color-blush-light)] px-[var(--space-3)] py-[var(--space-1)] font-brand-body text-[length:var(--fs-xs)] font-bold uppercase tracking-[var(--ls-tight)] text-[var(--color-rose-deep)]">
+                {bonus.tag}
+              </span>
+            </div>
+          </Card>
+        ))
+      }
+    </ul>
+  </div>
+</section>

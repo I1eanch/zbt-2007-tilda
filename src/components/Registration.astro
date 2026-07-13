@@ -1,0 +1,45 @@
+---
+import SectionLabel from './ui/SectionLabel.astro';
+import Button from './ui/Button.astro';
+import { registrationGifts } from '../content/landing';
+
+---
+
+<section id="registration" class="bg-[image:var(--gradient-form)] text-[var(--color-text-inverse)]">
+  <div
+    class="mx-auto max-w-[var(--container)] px-[var(--gutter)] pt-[var(--space-14)] pb-[calc(var(--space-14)+var(--space-12))] text-center"
+  >
+    <SectionLabel tone="inverse">Регистрация</SectionLabel>
+    <h2
+      class="mt-[var(--space-3)] font-brand-heading text-[length:var(--fs-2xl)] font-bold leading-[var(--lh-snug)] text-[var(--color-text-inverse)]"
+    >
+      Забрать место и все подарки
+    </h2>
+    <p class="mt-[var(--space-2)] font-brand-body text-[length:var(--fs-md)] text-[var(--color-sky-light)]">
+      20–22 июля · 18:00 МСК · Бесплатно
+    </p>
+
+    <div class="mt-[var(--space-8)] flex flex-col items-center gap-[var(--space-5)]">
+      <Button type="button" variant="cta" fullWidth class="max-w-[var(--container-narrow)]">
+        Регистрация — забрать место и все подарки
+      </Button>
+      <div data-sticky-stop class="mt-[var(--space-2)] w-full max-w-[600px] rounded-[var(--radius-xl)] border border-[color-mix(in_srgb,var(--color-white)_18%,transparent)] bg-[color-mix(in_srgb,var(--color-white)_16%,transparent)] px-[var(--space-6)] py-[var(--space-6)] text-left shadow-[var(--shadow-md)]">
+        <div class="font-brand-body text-[length:var(--fs-md)] font-bold uppercase tracking-[var(--ls-wide)] text-[var(--color-text-inverse)]">
+          Вы получите:
+        </div>
+        <ul class="mt-[var(--space-4)] flex list-none flex-col gap-[var(--space-3)]">
+          {
+            registrationGifts.map((gift) => (
+              <li class="flex items-baseline gap-[var(--space-3)] font-brand-body text-[length:var(--fs-md)] leading-[var(--lh-normal)] text-[var(--color-text-inverse)]">
+                <span class="inline-block min-w-[72px] flex-none rounded-[var(--radius-pill)] bg-[color-mix(in_srgb,var(--color-green)_32%,var(--color-white))] px-[var(--space-3)] py-[4px] text-center text-[length:var(--fs-sm)] font-bold uppercase tracking-[var(--ls-tight)] text-[var(--color-surface-dark-deep)]">
+                  {gift.timing}
+                </span>
+                <span>{gift.text}</span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>

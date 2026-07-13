@@ -1,0 +1,42 @@
+@import "tailwindcss";
+@import "../../tokens.css";
+
+@theme inline {
+  --color-brand-sky: var(--color-sky);
+  --color-brand-sky-light: var(--color-sky-light);
+  --color-brand-blush: var(--color-blush);
+  --color-brand-blush-light: var(--color-blush-light);
+  --color-brand-rose: var(--color-rose);
+  --color-brand-rose-deep: var(--color-rose-deep);
+  --color-brand-cta: var(--color-cta);
+  --color-brand-text: var(--color-text);
+  --color-brand-muted: var(--color-text-muted);
+  --font-brand-heading: var(--font-heading);
+  --font-brand-body: var(--font-body);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--nav-height) + var(--space-2));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: var(--color-snow);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  line-height: var(--lh-relaxed);
+  -webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-blue-deep);
+  outline-offset: 3px;
+}

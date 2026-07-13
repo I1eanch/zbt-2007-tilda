@@ -1,0 +1,148 @@
+---
+import Button from './ui/Button.astro';
+
+const navLinks = [
+  { href: '#program', label: 'Программа' },
+  { href: '#career', label: 'Профессия' },
+  { href: '#speaker', label: 'Спикер' },
+  { href: '#bonuses', label: 'Бонусы' },
+];
+---
+
+<header
+  data-nav
+  class="fixed inset-x-0 top-0 z-50 border-b border-transparent bg-[color-mix(in_srgb,var(--color-white)_72%,transparent)] backdrop-blur-md transition-[background-color,border-color,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-default)] motion-reduce:transition-none data-[scrolled=true]:border-[var(--color-border)] data-[scrolled=true]:bg-[color-mix(in_srgb,var(--color-white)_92%,transparent)] data-[scrolled=true]:shadow-[var(--shadow-sm)]"
+>
+  <nav
+    aria-label="Основная навигация"
+    class="mx-auto flex h-[var(--nav-height)] max-w-[var(--container)] items-center justify-between gap-[var(--space-4)] px-[var(--gutter)]"
+  >
+    <ul class="hidden list-none items-center gap-[var(--space-6)] min-[860px]:flex">
+      {
+        navLinks.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              data-nav-link
+              class="relative inline-block py-[var(--space-1)] font-brand-body text-[length:var(--fs-sm)] font-semibold text-[var(--color-text-muted)] transition-[color] duration-[var(--duration-base)] ease-[var(--ease-default)] hover:text-[var(--color-rose-deep)] after:absolute after:-bottom-[2px] after:left-0 after:h-[2px] after:w-0 after:rounded-[var(--radius-pill)] after:bg-[image:var(--gradient-cta)] after:transition-[width] after:duration-[var(--duration-base)] after:ease-[var(--ease-default)] motion-reduce:after:transition-none hover:after:w-full data-[active=true]:text-[var(--color-rose-deep)] data-[active=true]:after:w-full"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <div class="hidden min-[860px]:block">
+      <Button
+        href="#registration"
+        variant="cta"
+        class="px-[var(--space-6)] py-[var(--space-2)] text-[length:var(--fs-sm)]"
+      >
+        Забрать место
+      </Button>
+    </div>
+
+    <button
+      type="button"
+      data-nav-toggle
+      data-open="false"
+      aria-label="Открыть меню"
+      aria-expanded="false"
+      aria-controls="nav-panel"
+      class="group relative ml-auto flex h-[var(--space-10)] w-[var(--space-10)] flex-none items-center justify-center rounded-[var(--radius-md)] min-[860px]:hidden"
+    >
+      <span class="sr-only">Меню</span>
+      <span aria-hidden="true" class="relative flex h-[16px] w-[22px] flex-col justify-between">
+        <span class="block h-[2px] w-full rounded-[var(--radius-pill)] bg-[var(--color-text)] transition-transform duration-[var(--duration-base)] ease-[var(--ease-default)] motion-reduce:transition-none group-data-[open=true]:translate-y-[7px] group-data-[open=true]:rotate-45"></span>
+        <span class="block h-[2px] w-full rounded-[var(--radius-pill)] bg-[var(--color-text)] transition-opacity duration-[var(--duration-base)] ease-[var(--ease-default)] motion-reduce:transition-none group-data-[open=true]:opacity-0"></span>
+        <span class="block h-[2px] w-full rounded-[var(--radius-pill)] bg-[var(--color-text)] transition-transform duration-[var(--duration-base)] ease-[var(--ease-default)] motion-reduce:transition-none group-data-[open=true]:-translate-y-[7px] group-data-[open=true]:-rotate-45"></span>
+      </span>
+    </button>
+  </nav>
+
+  <div
+    id="nav-panel"
+    data-nav-panel
+    data-open="false"
+    class="absolute inset-x-0 top-full border-t border-[var(--color-border)] bg-[color-mix(in_srgb,var(--color-white)_96%,transparent)] backdrop-blur-md transition-[opacity,transform,visibility] duration-[var(--duration-base)] ease-[var(--ease-default)] motion-reduce:transition-none data-[open=false]:pointer-events-none data-[open=false]:invisible data-[open=false]:-translate-y-[var(--space-2)] data-[open=false]:opacity-0 data-[open=true]:visible data-[open=true]:translate-y-0 data-[open=true]:opacity-100 min-[860px]:hidden"
+  >
+    <ul class="flex list-none flex-col gap-[var(--space-1)] px-[var(--gutter)] py-[var(--space-4)]">
+      {
+        navLinks.map((link) => (
+          <li>
+            <a
+              href={link.href}
+              data-nav-link
+              class="block rounded-[var(--radius-md)] px-[var(--space-3)] py-[var(--space-3)] font-brand-body text-[length:var(--fs-base)] font-semibold text-[var(--color-text)] transition-[background-color,color] duration-[var(--duration-base)] ease-[var(--ease-default)] motion-reduce:transition-none hover:bg-[var(--color-blush-light)] hover:text-[var(--color-rose-deep)] data-[active=true]:text-[var(--color-rose-deep)]"
+            >
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+      <li class="mt-[var(--space-2)]">
+        <Button href="#registration" variant="cta" fullWidth>
+          Забрать место
+        </Button>
+      </li>
+    </ul>
+  </div>
+</header>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-nav]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+  const panel = document.querySelector<HTMLElement>('[data-nav-panel]');
+  const links = Array.from(document.querySelectorAll<HTMLAnchorElement>('[data-nav-link]'));
+
+  if (header && toggle && panel) {
+    const setOpen = (open: boolean) => {
+      toggle.dataset.open = String(open);
+      panel.dataset.open = String(open);
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Закрыть меню' : 'Открыть меню');
+    };
+
+    toggle.addEventListener('click', () => setOpen(toggle.dataset.open !== 'true'));
+
+    panel.addEventListener('click', (event) => {
+      const target = event.target;
+      if (target instanceof Element && target.closest('a')) setOpen(false);
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') setOpen(false);
+    });
+
+    const onScroll = () => {
+      header.dataset.scrolled = window.scrollY > 24 ? 'true' : 'false';
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    const sections = links
+      .map((link) => document.querySelector(link.getAttribute('href') ?? ''))
+      .filter((element): element is HTMLElement => element instanceof HTMLElement);
+
+    const spy = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          const id = `#${entry.target.id}`;
+          for (const link of links) {
+            link.dataset.active = link.getAttribute('href') === id ? 'true' : 'false';
+          }
+        }
+      },
+      { rootMargin: '-45% 0px -50% 0px', threshold: 0 },
+    );
+    for (const section of new Set(sections)) spy.observe(section);
+
+    const onBeforeSwap = () => {
+      spy.disconnect();
+      window.removeEventListener('scroll', onScroll);
+    };
+    document.addEventListener('astro:before-swap', onBeforeSwap, { once: true });
+  }
+</script>

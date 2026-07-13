@@ -1,0 +1,97 @@
+---
+import { Image } from 'astro:assets';
+import SectionLabel from './ui/SectionLabel.astro';
+import { programDays } from '../content/landing';
+import programDay1 from '../assets/program-day-1.jpg';
+import programDay2 from '../assets/program-day-2.jpg';
+import programDay3 from '../assets/program-day-3.jpg';
+
+const dayImage = {
+  1: programDay1,
+  2: programDay2,
+  3: programDay3,
+} as const;
+
+const giftTone: Record<'blush' | 'sky' | 'mixed', string> = {
+  blush: 'bg-[var(--color-blush-pale)]',
+  sky: 'bg-[var(--color-sky-pale)]',
+  mixed: 'bg-[image:var(--gradient-warm-cool)]',
+};
+---
+
+<section id="program" class="border-b border-[var(--color-border)]">
+  <div class="mx-auto max-w-[var(--container)] px-[var(--gutter)] py-[var(--space-14)]">
+    <SectionLabel>Программа</SectionLabel>
+    <h2
+      class="mb-[var(--space-8)] mt-[var(--space-3)] font-brand-heading text-[length:var(--fs-xl)] font-bold leading-[var(--lh-snug)] text-[var(--color-text)]"
+    >
+      Три вечера: разобраться в теле, увидеть систему, войти в профессию
+    </h2>
+
+    <div class="flex flex-col gap-[var(--space-6)]">
+      {
+        programDays.map((day) => (
+          <article
+            data-program-day
+            class="overflow-hidden rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-[var(--color-white)] shadow-[var(--shadow-lg)]"
+            data-animate="reveal"
+          >
+            <div class="flex flex-col items-center gap-[var(--space-4)] px-[var(--space-6)] pt-[var(--space-6)] text-center min-[700px]:flex-row min-[700px]:text-left">
+              <div class="h-[112px] w-[112px] flex-none overflow-hidden rounded-[var(--radius-lg)] border border-[var(--color-border)]">
+                <Image
+                  src={dayImage[day.day]}
+                  alt=""
+                  width={224}
+                  height={224}
+                  class="h-full w-full object-cover"
+                  loading="lazy"
+                />
+              </div>
+              <div>
+                <span class="inline-block rounded-[var(--radius-pill)] bg-[var(--color-blush-light)] px-[var(--space-3)] py-[var(--space-1)] font-brand-body text-[length:var(--fs-xs)] font-bold uppercase tracking-[var(--ls-tight)] text-[var(--color-rose-deep)]">
+                  День {day.day}
+                </span>
+                <div class="mt-[var(--space-2)] font-brand-body text-[length:var(--fs-sm)] font-semibold text-[var(--color-rose-deep)]">
+                  {day.date}
+                </div>
+                <h3 class="mt-[var(--space-1)] font-brand-heading text-[length:var(--fs-md)] font-bold leading-[var(--lh-snug)] text-[var(--color-text)]">
+                  {day.title}
+                </h3>
+              </div>
+            </div>
+
+            <div class="px-[var(--space-6)] pb-[var(--space-6)]">
+              <p class="my-[var(--space-4)] font-brand-body text-[length:var(--fs-base)] leading-[var(--lh-loose)] text-[var(--color-text-muted)]">
+                {day.hook}
+              </p>
+              <ul class="mb-[var(--space-5)] flex list-none flex-col gap-[var(--space-3)]">
+                {day.points.map((point) => (
+                  <li class="flex items-start gap-[var(--space-3)] font-brand-body text-[length:var(--fs-base)] leading-[var(--lh-normal)] text-[var(--color-text)]">
+                    <span class="mt-[8px] h-[6px] w-[6px] min-w-[6px] rounded-full bg-[var(--color-rose)]" aria-hidden="true" />
+                    <span>{point}</span>
+                  </li>
+                ))}
+              </ul>
+              <div
+                class:list={[
+                  'flex items-start gap-[var(--space-3)] rounded-[var(--radius-md)] border border-[var(--color-border)] px-[var(--space-5)] py-[var(--space-4)]',
+                  giftTone[day.tone],
+                ]}
+              >
+                <span class="text-[20px] leading-none" aria-hidden="true">🎁</span>
+                <div>
+                  <div class="font-brand-heading text-[length:var(--fs-base)] font-bold text-[var(--color-text)]">
+                    {day.giftTitle}
+                  </div>
+                  <div class="mt-[var(--space-1)] font-brand-body text-[length:var(--fs-sm)] leading-[var(--lh-normal)] text-[var(--color-text-muted)]">
+                    {day.giftDescription}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>

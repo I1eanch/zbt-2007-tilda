@@ -1,0 +1,50 @@
+---
+import SectionLabel from './ui/SectionLabel.astro';
+import { careerSteps } from '../content/landing';
+---
+
+<section id="career" class="border-b border-[var(--color-border)]">
+  <div class="mx-auto max-w-[var(--container)] px-[var(--gutter)] py-[var(--space-14)]">
+    <SectionLabel>От здоровья — к профессии</SectionLabel>
+    <h2
+      class="mb-[var(--space-5)] mt-[var(--space-3)] font-brand-heading text-[length:var(--fs-xl)] font-bold leading-[var(--lh-snug)] text-[var(--color-text)]"
+    >
+      Как из желания разобраться со своим здоровьем вырастает профессия
+    </h2>
+    <p
+      class="mb-[var(--space-6)] font-brand-body text-[length:var(--fs-base)] leading-[var(--lh-loose)] text-[var(--color-text-muted)]"
+    >
+      Почти все приходят просто разобраться с собой: усталость, вес, гормоны, кишечник. А потом
+      ловят себя на мысли: «Я ведь уже понимаю больше, чем многие. Этим можно помогать другим —
+      и зарабатывать». Вот как выглядит этот путь. Спокойно, по шагам, с нуля.
+    </p>
+
+    <ol class="flex list-none flex-col gap-[var(--space-3)]" data-animate="stagger">
+      {
+        careerSteps.map((step, index) => (
+          <li
+            data-career-step
+            class="flex items-start gap-[var(--space-4)] rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-white)] px-[var(--space-5)] py-[var(--space-4)] shadow-[var(--shadow-sm)]"
+          >
+            <span
+              class="flex h-8 w-8 min-w-8 items-center justify-center rounded-full bg-[image:var(--gradient-cta)] font-brand-heading text-[length:var(--fs-sm)] font-bold text-[var(--color-text-inverse)]"
+              aria-hidden="true"
+            >
+              {index + 1}
+            </span>
+            <p class="font-brand-body text-[length:var(--fs-base)] leading-[var(--lh-normal)] text-[var(--color-text)]">
+              <b class="font-brand-heading font-bold text-[var(--color-text)]">{step.title}</b> {step.description}
+            </p>
+          </li>
+        ))
+      }
+    </ol>
+
+    <div
+      class="mt-[var(--space-5)] rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[image:var(--gradient-warm-cool)] px-[var(--space-6)] py-[var(--space-5)] font-brand-body text-[length:var(--fs-base)] leading-[var(--lh-relaxed)] text-[var(--color-text)]"
+    >
+      Не нужно медицинского образования и не нужно знать всё сразу. Нужно начать — а дальше
+      система ведёт вас шаг за шагом. Именно с этого пути и начинается марафон.
+    </div>
+  </div>
+</section>

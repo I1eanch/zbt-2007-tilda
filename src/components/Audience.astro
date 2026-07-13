@@ -1,0 +1,32 @@
+---
+import SectionLabel from './ui/SectionLabel.astro';
+import { audienceItems } from '../content/landing';
+---
+
+<section id="audience" class="border-b border-[var(--color-border)]">
+  <div class="mx-auto max-w-[var(--container)] px-[var(--gutter)] py-[var(--space-14)]">
+    <SectionLabel>Для кого</SectionLabel>
+    <h2
+      class="mb-[var(--space-5)] mt-[var(--space-3)] font-brand-heading text-[length:var(--fs-xl)] font-bold leading-[var(--lh-snug)] text-[var(--color-text)]"
+    >
+      Приходите, если хотя бы одно — про вас
+    </h2>
+    <ul class="flex list-none flex-col gap-[var(--space-3)]" data-animate="stagger">
+      {
+        audienceItems.map((item) => (
+          <li class="flex items-start gap-[var(--space-4)] rounded-[var(--radius-md)] border border-[var(--color-border)] bg-[var(--color-white)] px-[var(--space-5)] py-[var(--space-4)] shadow-[var(--shadow-sm)]">
+            <span
+              class="mt-[1px] flex h-7 w-7 min-w-7 items-center justify-center rounded-full bg-[image:var(--gradient-warm-cool)] text-[length:var(--fs-sm)] text-[var(--color-rose)]"
+              aria-hidden="true"
+            >
+              ✓
+            </span>
+            <span class="font-brand-body text-[length:var(--fs-base)] leading-[var(--lh-normal)] text-[var(--color-text)]">
+              {item}
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </div>
+</section>

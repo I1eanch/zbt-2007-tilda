@@ -1,0 +1,39 @@
+---
+import { Image } from 'astro:assets';
+import SectionLabel from './ui/SectionLabel.astro';
+import speakerPhoto from '../assets/speaker-marina.jpg';
+---
+
+<section id="speaker">
+  <div class="mx-auto max-w-[var(--container)] px-[var(--gutter)] py-[var(--space-14)]">
+    <SectionLabel>Спикер</SectionLabel>
+    <div
+      class="mt-[var(--space-5)] flex flex-col items-center gap-[var(--space-7)] rounded-[var(--radius-xl)] border border-[var(--color-border)] bg-[var(--color-white)] px-[var(--space-8)] py-[var(--space-9)] text-center shadow-[var(--shadow-lg)] min-[700px]:flex-row min-[700px]:items-start min-[700px]:text-left"
+      data-animate="reveal"
+    >
+      <Image
+        src={speakerPhoto}
+        alt="Марина Жигульская"
+        width={480}
+        height={600}
+        class="aspect-[4/5] w-[160px] min-w-[160px] flex-none rounded-[var(--radius-lg)] object-cover shadow-[var(--shadow-md)] min-[700px]:w-[200px] min-[700px]:min-w-[200px]"
+        loading="lazy"
+      />
+      <div>
+        <div class="font-brand-heading text-[length:var(--fs-xl)] font-bold text-[var(--color-text)]">
+          Марина Жигульская
+        </div>
+        <div class="mt-[var(--space-1)] font-brand-body text-[length:var(--fs-base)] font-semibold text-[var(--color-rose-deep)]">
+          Нутрициолог · Основатель школы «Ресурс»
+        </div>
+        <p
+          class="mt-[var(--space-3)] font-brand-body text-[length:var(--fs-md)] leading-[var(--lh-relaxed)] text-[var(--color-text-muted)]"
+        >
+          В 45 лет получила диагноз и решила разобраться сама. За 7 лет — от пациента до эксперта
+          с 3 500+ учениками. Сегодня ей 54, и это лучшие годы её жизни. Живёт и работает из любой
+          точки мира.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

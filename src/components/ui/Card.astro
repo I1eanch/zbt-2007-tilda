@@ -1,0 +1,42 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'div'> & {
+  as?: 'article' | 'div' | 'li';
+  tone?: 'default' | 'blush' | 'sky' | 'gradient' | 'dark';
+  interactive?: boolean;
+};
+
+const {
+  as = 'div',
+  tone = 'default',
+  interactive = false,
+  class: className,
+  ...restProps
+} = Astro.props as Props;
+
+const Tag = as;
+
+const baseClasses = 'block rounded-[var(--radius-xl)]';
+
+const toneClasses: Record<'default' | 'blush' | 'sky' | 'gradient' | 'dark', string> = {
+  default:
+    'bg-[var(--color-white)] border border-[var(--color-border)] shadow-[var(--shadow-lg)] text-[var(--color-text)]',
+  blush:
+    'bg-[var(--color-blush-light)] border border-[var(--color-border)] shadow-[var(--shadow-md)] text-[var(--color-text)]',
+  sky: 'bg-[var(--color-sky-light)] border border-[var(--color-border)] shadow-[var(--shadow-md)] text-[var(--color-text)]',
+  gradient:
+    'bg-[image:var(--gradient-warm-cool)] border border-[var(--color-border)] shadow-[var(--shadow-md)] text-[var(--color-text)]',
+  dark: 'bg-[image:var(--gradient-form)] shadow-[var(--shadow-lg)] text-[var(--color-text-inverse)]',
+};
+
+const interactiveClasses =
+  'transition-[transform,box-shadow] duration-[var(--duration-base)] ease-[var(--ease-default)] hover:translate-y-[var(--hover-lift)] hover:shadow-[var(--shadow-hover)]';
+---
+
+<Tag
+  {...restProps}
+  class:list={[baseClasses, toneClasses[tone], interactive && interactiveClasses, className]}
+>
+  <slot />
+</Tag>

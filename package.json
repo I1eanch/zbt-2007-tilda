@@ -1,0 +1,31 @@
+{
+  "name": "zbt-2007",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "packageManager": "npm@10.9.7",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check",
+    "validate:content": "node --experimental-strip-types scripts/validate-content.mjs",
+    "test:e2e": "playwright test",
+    "verify": "npm run validate:content && npm run check && npm run build && npm run test:e2e",
+    "smoke:container": "node scripts/smoke-container.mjs"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.2.4",
+    "astro": "^7.0.7",
+    "gsap": "^3.15.0",
+    "tailwindcss": "^4.2.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "@playwright/test": "^1.61.1",
+    "typescript": "^6.0.3"
+  }
+}

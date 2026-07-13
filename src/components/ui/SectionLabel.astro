@@ -1,0 +1,19 @@
+---
+interface Props {
+  tone?: 'default' | 'inverse';
+}
+
+const { tone = 'default' } = Astro.props;
+
+const baseClasses =
+  'block font-brand-body text-[length:var(--fs-xs)] font-bold uppercase tracking-[var(--ls-wider)]';
+
+const toneClasses: Record<'default' | 'inverse', string> = {
+  default: 'text-[var(--color-rose)]',
+  inverse: 'text-[var(--color-text-inverse)]',
+};
+---
+
+<span class:list={[baseClasses, toneClasses[tone]]}>
+  <slot />
+</span>
