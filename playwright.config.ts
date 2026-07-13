@@ -12,10 +12,6 @@ export default defineConfig({
   webServer: {
     command: 'npm run dev -- --host 127.0.0.1 --port 4321',
     url: 'http://127.0.0.1:4321',
-    // Astro dev cold start under the agent harness is highly variable (~15–70s);
-    // the default 60s webServer timeout flakes. 180s absorbs the slow binds and
-    // is harmless where startup is fast.
-    timeout: 180_000,
     reuseExistingServer: false,
     // Astro 7 под агент-харнессом (am-i-vibing) авто-демонизирует `astro dev`.
     // Переменная ASTRO_DEV_BACKGROUND удерживает процесс в foreground, чтобы

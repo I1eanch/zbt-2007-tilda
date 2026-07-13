@@ -53,39 +53,4 @@ const asset = await fetchOk(assetPath);
 assertSecurityHeaders(assetPath, asset);
 assertHeader(assetPath, asset, 'cache-control', 'public, max-age=31536000, immutable');
 
-// The Tilda embed endpoint is the only frameable document: it keeps the three
-// non-framing security headers, drops X-Frame-Options, and advertises a
-// Content-Security-Policy frame-ancestors allowlist (default includes Tilda).
-const embed = await fetchOk('/embed/');
-const embedBody = await embed.text();
-if (!embedBody.includes('Здоровье без таблеток')) throw new Error('/embed/: missing Здоровье без таблеток');
-for (const [name, expected] of Object.entries(securityHeaders)) {
-  if (name === 'x-frame-options') continue;
-  assertHeader('/embed/', embed, name, expected);
-}
-if (embed.headers.get('x-frame-options') !== null) {
-  throw new Error(`/embed/: X-Frame-Options must be absent, received "${embed.headers.get('x-frame-options')}"`);
-}
-const csp = embed.headers.get('content-security-policy');
-if (!csp || !csp.includes('frame-ancestors')) {
-  throw new Error(`/embed/: expected Content-Security-Policy with frame-ancestors, received "${csp}"`);
-}
-// Prove the FRAME_ANCESTORS template was expanded by envsubst at container start
-// (the literal placeholder would otherwise satisfy the frame-ancestors check).
-if (/\$\{?FRAME_ANCESTORS/i.test(csp) || csp.includes('${')) {
-  throw new Error(`/embed/: FRAME_ANCESTORS was not substituted, received "${csp}"`);
-}
-const expectedAncestors = process.env.SMOKE_FRAME_ANCESTORS;
-if (expectedAncestors) {
-  if (!csp.includes(expectedAncestors)) {
-    throw new Error(`/embed/: frame-ancestors expected to include "${expectedAncestors}", received "${csp}"`);
-  }
-} else if (!/tilda/i.test(csp)) {
-  throw new Error(`/embed/: default frame-ancestors should include a Tilda origin, received "${csp}"`);
-}
-assertHeader('/embed/', embed, 'cache-control', 'no-cache');
-
-// The standalone landing must stay clickjacking-protected.
-assertHeader('/', home, 'x-frame-options', 'DENY');
-
 console.log('container smoke passed');

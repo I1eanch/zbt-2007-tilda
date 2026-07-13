@@ -3,7 +3,7 @@
 Operator runbook for deploying this static Astro/nginx site to a self-managed VPS
 through Dokploy. It transcribes the deployment contract from
 `docs/superpowers/plans/2026-07-10-astro-landing-dokploy.md` (Task 12) and is
-cross-checked against the current `Dockerfile` and `nginx.conf.template`.
+cross-checked against the current `Dockerfile` and `nginx.conf`.
 
 > **No remote deployment has been performed.** This document is the repository
 > deliverable only. The required operator inputs and remote access (see
@@ -22,7 +22,6 @@ substitute example values for any of them.
 | Production branch | The Git branch Dokploy builds from. | Operator |
 | VPS / Dokploy access | SSH and Dokploy dashboard credentials for the target host. | Operator |
 | DNS control | Ability to create the A/(AAAA) record for `PRODUCTION_DOMAIN`. | Operator |
-| `FRAME_ANCESTORS` (embed) | frame-ancestors allowlist for the `/embed/` Tilda iframe. Optional: the `Dockerfile` default already allows Tilda platform origins; **required only** when the Tilda page is published on a custom domain (add that origin). Set as a Dokploy environment variable, not a build arg. | Operator (conditional) |
 
 ## Preflight gate (fail fast)
 
@@ -136,13 +135,12 @@ The runbook values above are consistent with the current repository build:
 | --- | --- | --- |
 | Build type `Dockerfile`, context `.` | `Dockerfile` (multi-stage `node` → `nginx`) | confirmed |
 | Build argument `PUBLIC_SITE_URL` | `Dockerfile` (`ARG`/`ENV PUBLIC_SITE_URL`); consumed in `astro.config.mjs` | confirmed |
-| Container port `80` | `Dockerfile` `EXPOSE 80`; `nginx.conf.template` `listen 80` | confirmed |
-| Health URL `/healthz` | `nginx.conf.template` `location = /healthz { return 200 "ok" }`; `Dockerfile` `HEALTHCHECK … /healthz` | confirmed |
+| Container port `80` | `Dockerfile` `EXPOSE 80`; `nginx.conf` `listen 80` | confirmed |
+| Health URL `/healthz` | `nginx.conf` `location = /healthz { return 200 "ok" }`; `Dockerfile` `HEALTHCHECK … /healthz` | confirmed |
 | Health interval 30s / timeout 3s | `Dockerfile` `HEALTHCHECK --interval=30s --timeout=3s` | confirmed |
-| No published host ports; Traefik routes to `:80` | `nginx.conf.template` serves on `:80`; no host port bindings in repo | confirmed |
-| Security headers present | `nginx.conf.template` `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `X-Frame-Options: DENY` on all documents except `/embed/` | confirmed |
-| Embed framing (`/embed/`) | `nginx.conf.template` `location ^~ /embed/`: no `X-Frame-Options`, `Content-Security-Policy: frame-ancestors ${FRAME_ANCESTORS}`; see `docs/deployment/tilda-embed.md` | confirmed |
-| Static caching (`/_astro` immutable, `index.html` no-cache) | `nginx.conf.template` `location ^~ /_astro/`, `location = /index.html` | confirmed |
+| No published host ports; Traefik routes to `:80` | `nginx.conf` serves on `:80`; no host port bindings in repo | confirmed |
+| Security headers present | `nginx.conf` `X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `X-Frame-Options` | confirmed |
+| Static caching (`/_astro` immutable, `index.html` no-cache) | `nginx.conf` `location ^~ /_astro/`, `location = /index.html` | confirmed |
 | Homepage smoke string | `src/pages/index.astro` title `Здоровье без таблеток…` | confirmed |
 
 ## Remote execution status (unresolved operator gate)
