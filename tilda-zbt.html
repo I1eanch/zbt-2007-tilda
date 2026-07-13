@@ -1,0 +1,554 @@
+<!-- ════════════════════════════════════════════════════════════════════
+     ЗДОРОВЬЕ БЕЗ ТАБЛЕТОК — Марина Жигульская · Школа «Ресурс»
+     Готовый блок для Tilda. Вставьте ВЕСЬ этот код в ОДИН блок:
+     «Другое» → «T123 · HTML-код» (обычным блоком в потоке страницы).
+     Без обёрток <html>/<head>/<body>. Весь CSS изолирован под .zbt,
+     JS — в IIFE с guard по data-zbt-init (не дублируется при ре-рендере).
+     Иллюстрации — inline SVG, внешние картинки не нужны.
+     Регистрация — встроенный виджет GetCourse (iandmyhealth.ru, id 1629532):
+     все кнопки «Забрать место» ведут к блоку #zbt-reg, форма грузится там.
+     См. README-TILDA.md.
+═════════════════════════════════════════════════════════════════════ -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* Дублируем шрифты через @import — Tilda иногда вырезает верхний <link>. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+/* ─── SCOPED RESET (только внутри .zbt — chrome Tilda не трогаем) ─── */
+.zbt, .zbt *, .zbt *::before, .zbt *::after { box-sizing: border-box; margin: 0; padding: 0; }
+.zbt {
+  --sky:#d4eaf7; --sky-light:#e8f4fc; --sky-pale:#f2f8fc;
+  --blue:#7bbde0; --blue-deep:#4a9cc9;
+  --blush:#f5d5d5; --blush-light:#fce8e8; --blush-pale:#fdf3f3;
+  --rose:#d4878f; --rose-deep:#c06b74;
+  --pink-btn:#e0627a; --pink-btn-light:#f0899b;
+  --white:#ffffff; --snow:#fafbfd;
+  --text:#2c3e50; --text-mid:#5a6d7e; --text-light:#94a3b3;
+  --border:#e4e9ef;
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  color:var(--text); background:var(--snow); line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.zbt img { max-width:100%; display:block; }
+.zbt a { text-decoration:none; }
+.zbt ul { list-style:none; }
+.zbt a:focus-visible, .zbt button:focus-visible { outline:3px solid var(--blue-deep); outline-offset:3px; border-radius:4px; }
+
+/* HERO */
+.zbt-hero { background:linear-gradient(170deg, var(--blush-pale) 0%, var(--white) 30%, var(--sky-light) 70%, var(--sky) 100%); padding:48px 24px 40px; text-align:center; position:relative; overflow:hidden; }
+.zbt-hero::before { content:''; position:absolute; top:-15%; left:-10%; width:400px; height:400px; background:radial-gradient(circle, rgba(212,135,143,0.1) 0%, transparent 70%); border-radius:50%; }
+.zbt-hero::after { content:''; position:absolute; bottom:-20%; right:-10%; width:450px; height:450px; background:radial-gradient(circle, rgba(123,189,224,0.12) 0%, transparent 70%); border-radius:50%; }
+.zbt-hero-label { display:inline-block; font-size:11px; font-weight:600; letter-spacing:3px; text-transform:uppercase; color:var(--rose-deep); background:var(--blush-light); padding:6px 18px; border-radius:20px; margin-bottom:20px; }
+.zbt-hero-content { display:flex; align-items:center; justify-content:center; gap:40px; max-width:900px; margin:0 auto 24px; position:relative; }
+.zbt-hero-text { text-align:left; flex:1; }
+.zbt-hero-illustration { flex:0 0 280px; }
+.zbt-hero h1 { font-family:'Montserrat',sans-serif; font-size:clamp(22px,4vw,34px); font-weight:800; line-height:1.1; color:var(--text); text-transform:uppercase; letter-spacing:2px; margin-bottom:8px; }
+.zbt-hero h1 .zbt-line2 { color:var(--rose-deep); }
+.zbt-hero-divider { width:60px; height:3px; background:linear-gradient(90deg, var(--rose), var(--blue)); border-radius:2px; margin:16px 0; }
+.zbt-hero-sub { font-size:15px; font-weight:400; color:var(--text-mid); line-height:1.7; margin-bottom:24px; }
+.zbt-cta { display:inline-block; padding:14px 32px; font-family:'Inter',sans-serif; font-size:15px; font-weight:600; color:var(--white); background:linear-gradient(135deg, var(--pink-btn), var(--pink-btn-light)); border:none; border-radius:50px; cursor:pointer; box-shadow:0 4px 20px rgba(224,98,122,0.3); transition:transform .3s, box-shadow .3s; }
+.zbt-cta:hover { transform:translateY(-2px); box-shadow:0 6px 28px rgba(224,98,122,0.4); }
+.zbt-hero-meta { display:flex; justify-content:center; gap:28px; flex-wrap:wrap; margin-top:20px; }
+.zbt-hero-meta-item { display:flex; align-items:center; gap:8px; font-size:13px; color:var(--text-mid); }
+.zbt-hero-meta-icon { width:32px; height:32px; background:var(--white); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:14px; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+
+.zbt-container { max-width:720px; margin:0 auto; padding:0 24px; }
+.zbt-section { padding:56px 0; }
+.zbt-section--border { border-bottom:1px solid var(--border); }
+.zbt-eyebrow { font-size:11px; font-weight:700; letter-spacing:2.5px; text-transform:uppercase; color:var(--rose); margin-bottom:12px; }
+.zbt-title { font-family:'Montserrat',sans-serif; font-size:26px; font-weight:700; color:var(--text); margin-bottom:20px; line-height:1.25; }
+
+/* HOOK */
+.zbt-hook { background:var(--white); border:1px solid var(--border); border-radius:20px; padding:36px 30px; box-shadow:0 4px 20px rgba(0,0,0,0.04); }
+.zbt-hook-question { font-family:'Montserrat',sans-serif; font-size:20px; font-weight:700; color:var(--text); margin-bottom:16px; line-height:1.35; }
+.zbt-hook-text { font-size:15px; color:var(--text-mid); line-height:1.75; margin-bottom:12px; }
+.zbt-hook-text:last-child { margin-bottom:0; }
+.zbt-hook-hl { font-weight:600; color:var(--rose-deep); }
+
+/* LIST (для кого / шаги) */
+.zbt-list { display:flex; flex-direction:column; gap:12px; }
+.zbt-list-item { background:var(--white); border:1px solid var(--border); border-radius:14px; padding:18px 22px; display:flex; gap:14px; align-items:flex-start; box-shadow:0 2px 10px rgba(0,0,0,0.03); transition:transform .2s, box-shadow .2s; }
+.zbt-list-item:hover { box-shadow:0 4px 16px rgba(0,0,0,0.06); transform:translateY(-1px); }
+.zbt-check { width:28px; min-width:28px; height:28px; background:linear-gradient(135deg, var(--blush-light), var(--sky-light)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; color:var(--rose); margin-top:1px; font-weight:700; }
+.zbt-list-text { font-size:14.5px; color:var(--text); line-height:1.5; }
+
+/* DUAL VALUE */
+.zbt-dual { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:24px; }
+.zbt-dual-card { border:1px solid var(--border); border-radius:16px; padding:28px 22px; }
+.zbt-dual-card--blush { background:var(--blush-pale); }
+.zbt-dual-card--sky { background:var(--sky-pale); }
+.zbt-dual-card-title { font-family:'Montserrat',sans-serif; font-weight:700; font-size:16px; color:var(--text); margin:14px 0 8px; }
+.zbt-dual-card-desc { font-size:14px; color:var(--text-mid); line-height:1.6; }
+.zbt-proof { background:var(--white); border:1px solid var(--border); border-radius:14px; padding:24px 28px; display:flex; gap:20px; align-items:center; flex-wrap:wrap; justify-content:center; }
+.zbt-proof-item { text-align:center; flex:1; min-width:140px; }
+.zbt-proof-value { font-family:'Montserrat',sans-serif; font-size:28px; font-weight:800; color:var(--rose-deep); }
+.zbt-proof-label { font-size:12px; color:var(--text-light); }
+.zbt-proof-sep { width:1px; height:40px; background:var(--border); }
+
+/* DAY CARDS */
+.zbt-day { background:var(--white); border:1px solid var(--border); border-radius:20px; margin-bottom:24px; overflow:hidden; box-shadow:0 4px 20px rgba(0,0,0,0.04); }
+.zbt-day-top { display:flex; align-items:stretch; }
+.zbt-day-illustration { width:140px; min-width:140px; display:flex; align-items:center; justify-content:center; padding:20px; }
+.zbt-day-illustration--1 { background:linear-gradient(135deg, var(--blush-light), var(--blush-pale)); }
+.zbt-day-illustration--2 { background:linear-gradient(135deg, var(--sky-light), var(--sky-pale)); }
+.zbt-day-illustration--3 { background:linear-gradient(135deg, var(--blush-light), var(--sky-light)); }
+.zbt-day-head { padding:20px 24px; display:flex; flex-direction:column; justify-content:center; }
+.zbt-day-label { font-family:'Montserrat',sans-serif; font-size:12px; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--rose-deep); margin-bottom:4px; }
+.zbt-day-date { font-size:13px; color:var(--text-light); margin-bottom:8px; }
+.zbt-day-title { font-family:'Montserrat',sans-serif; font-size:18px; font-weight:700; color:var(--text); line-height:1.3; }
+.zbt-day-body { padding:24px 28px; border-top:1px solid var(--border); }
+.zbt-day-hook { font-size:15px; color:var(--text-mid); line-height:1.7; margin-bottom:20px; font-style:italic; border-left:3px solid var(--rose); padding-left:16px; }
+.zbt-day-points { display:flex; flex-direction:column; gap:10px; margin-bottom:20px; }
+.zbt-day-points li { font-size:14px; line-height:1.5; padding-left:22px; position:relative; color:var(--text-mid); }
+.zbt-day-points li::before { content:''; position:absolute; left:0; top:7px; width:8px; height:8px; border-radius:50%; }
+.zbt-day--1 .zbt-day-points li::before { background:var(--rose); opacity:0.4; }
+.zbt-day--2 .zbt-day-points li::before { background:var(--blue); opacity:0.4; }
+.zbt-day--3 .zbt-day-points li::before { background:var(--pink-btn); opacity:0.4; }
+.zbt-day-gift { border-radius:14px; padding:16px 20px; display:flex; gap:12px; align-items:flex-start; }
+.zbt-day-gift--1 { background:var(--blush-pale); }
+.zbt-day-gift--2 { background:var(--sky-pale); }
+.zbt-day-gift--3 { background:linear-gradient(135deg, var(--blush-pale), var(--sky-pale)); }
+.zbt-day-gift-icon { font-size:24px; min-width:28px; }
+.zbt-day-gift-title { font-weight:700; font-size:14px; color:var(--text); margin-bottom:2px; }
+.zbt-day-gift-desc { font-size:13px; color:var(--text-mid); line-height:1.4; }
+
+.zbt-note { background:linear-gradient(135deg, var(--blush-pale), var(--sky-pale)); border:1px solid var(--border); border-radius:14px; padding:20px 26px; margin-top:20px; font-size:15px; color:var(--text); line-height:1.65; }
+.zbt-lead { font-size:15px; color:var(--text-mid); line-height:1.75; margin-bottom:24px; }
+
+/* NUMBERS */
+.zbt-nums { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.zbt-num { text-align:center; background:var(--white); border:1px solid var(--border); border-radius:16px; padding:28px 16px; box-shadow:0 2px 10px rgba(0,0,0,0.03); }
+.zbt-num-value { font-family:'Montserrat',sans-serif; font-size:36px; font-weight:800; color:var(--rose-deep); line-height:1; margin-bottom:8px; }
+.zbt-num-label { font-size:12px; color:var(--text-light); line-height:1.3; }
+
+/* SPEAKER */
+.zbt-speaker { display:flex; gap:24px; align-items:flex-start; background:var(--white); border:1px solid var(--border); border-radius:20px; padding:28px; box-shadow:0 4px 20px rgba(0,0,0,0.04); }
+.zbt-speaker-photo { width:90px; min-width:90px; height:90px; background:linear-gradient(135deg, var(--blush), var(--sky)); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:28px; color:#fff; font-family:'Montserrat',sans-serif; font-weight:700; }
+.zbt-speaker-name { font-family:'Montserrat',sans-serif; font-size:20px; font-weight:700; color:var(--text); margin-bottom:4px; }
+.zbt-speaker-role { font-size:13px; color:var(--rose); font-weight:500; margin-bottom:10px; }
+.zbt-speaker-bio { font-size:14px; color:var(--text-mid); line-height:1.6; }
+
+/* BONUSES */
+.zbt-bonus { background:linear-gradient(170deg, var(--blush-pale) 0%, var(--white) 50%, var(--sky-light) 100%); padding:56px 24px; }
+.zbt-bonus-inner { max-width:720px; margin:0 auto; }
+.zbt-bonus-title { font-family:'Montserrat',sans-serif; font-size:24px; font-weight:700; color:var(--text); margin-bottom:24px; text-align:center; line-height:1.3; }
+.zbt-bonus-title em { font-style:normal; color:var(--rose-deep); }
+.zbt-bonus-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.zbt-bonus-card { background:var(--white); border:1px solid var(--border); border-radius:16px; padding:24px 20px; box-shadow:0 4px 16px rgba(0,0,0,0.04); display:flex; gap:16px; align-items:flex-start; }
+.zbt-bonus-card-illust { width:56px; min-width:56px; }
+.zbt-bonus-card-name { font-weight:700; font-size:14px; color:var(--text); margin-bottom:6px; line-height:1.3; }
+.zbt-bonus-card-desc { font-size:13px; color:var(--text-mid); line-height:1.5; }
+.zbt-bonus-card-tag { display:inline-block; background:var(--blush-light); color:var(--rose-deep); font-size:10px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; padding:3px 10px; border-radius:20px; margin-top:8px; }
+
+/* REGISTRATION */
+.zbt-reg { background:linear-gradient(170deg, #3a3a4a 0%, #2a2a38 100%); color:#fff; padding:56px 24px; }
+.zbt-reg-inner { max-width:520px; margin:0 auto; text-align:center; }
+.zbt-reg-inner h2 { font-family:'Montserrat',sans-serif; font-size:26px; font-weight:700; margin-bottom:8px; }
+.zbt-reg-sub { font-size:15px; opacity:0.7; margin-bottom:28px; }
+.zbt-reg-widget { background:var(--white); border-radius:20px; padding:20px; margin-bottom:24px; min-height:120px; text-align:left; overflow:hidden; }
+.zbt-reg-loading { padding:36px 0; text-align:center; color:var(--text-mid); font-size:15px; }
+.zbt-gifts { text-align:left; background:rgba(255,255,255,0.06); border-radius:16px; padding:20px; }
+.zbt-gifts-title { font-size:11px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--pink-btn-light); margin-bottom:14px; }
+.zbt-gift-line { display:flex; gap:8px; align-items:flex-start; margin-bottom:10px; font-size:13px; opacity:0.85; line-height:1.4; }
+.zbt-gift-line:last-child { margin-bottom:0; }
+.zbt-gift-line .zbt-tag { font-size:9px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; background:rgba(255,255,255,0.1); padding:2px 8px; border-radius:20px; white-space:nowrap; margin-top:2px; }
+.zbt-reg-note { font-size:12px; opacity:0.45; margin-top:16px; }
+
+.zbt-footer { max-width:720px; margin:0 auto; padding:40px 24px; text-align:center; font-size:14px; color:var(--text-mid); border-top:1px solid var(--border); }
+.zbt-footer p { margin-bottom:4px; }
+.zbt-footer-name { font-weight:600; color:var(--text); }
+.zbt-footer a { color:inherit; text-decoration:underline; text-decoration-style:dotted; text-underline-offset:2px; transition:color .2s; }
+.zbt-footer a:hover { color:var(--rose-deep); }
+.zbt-footer-legal { margin-top:20px; padding-top:20px; border-top:1px solid var(--border); display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:8px 16px; font-size:12px; }
+
+/* FLOATING CTA */
+.zbt-float { position:fixed; bottom:0; left:0; right:0; background:rgba(255,255,255,0.95); backdrop-filter:blur(10px); padding:12px 20px; display:flex; justify-content:center; z-index:100; box-shadow:0 -2px 20px rgba(0,0,0,0.06); border-top:1px solid var(--border); transform:translateY(120%); visibility:hidden; pointer-events:none; transition:transform .3s ease, visibility .3s ease; }
+.zbt-float[data-show="true"] { transform:translateY(0); visibility:visible; pointer-events:auto; }
+.zbt-float a { display:inline-block; padding:12px 32px; font-family:'Inter',sans-serif; font-size:14px; font-weight:600; color:var(--white); background:linear-gradient(135deg, var(--pink-btn), var(--pink-btn-light)); border-radius:50px; box-shadow:0 4px 16px rgba(224,98,122,0.3); }
+
+@media (prefers-reduced-motion: reduce) {
+  .zbt-cta, .zbt-list-item, .zbt-float { transition:none; }
+}
+
+@media (max-width:700px) {
+  .zbt-hero-content { flex-direction:column-reverse; gap:20px; }
+  .zbt-hero-text { text-align:center; }
+  .zbt-hero-illustration { flex:0 0 auto; width:200px; }
+  .zbt-hero-divider { margin:16px auto; }
+  .zbt-dual { grid-template-columns:1fr; }
+  .zbt-day-top { flex-direction:column; }
+  .zbt-day-illustration { width:100%; height:140px; }
+  .zbt-nums { grid-template-columns:1fr; }
+  .zbt-bonus-grid { grid-template-columns:1fr; }
+  .zbt-bonus-card { flex-direction:column; align-items:center; text-align:center; }
+  .zbt-speaker { flex-direction:column; align-items:center; text-align:center; }
+  .zbt-title { font-size:22px; }
+  .zbt-container { padding:0 20px; }
+  .zbt-hero-meta { flex-direction:column; align-items:center; gap:12px; }
+}
+</style>
+
+<div class="zbt">
+
+  <!-- HERO -->
+  <section class="zbt-hero">
+    <div class="zbt-hero-label">Бесплатный марафон · 20–22 июля</div>
+    <div class="zbt-hero-content">
+      <div class="zbt-hero-text">
+        <h1>ЗДОРОВЬЕ БЕЗ ТАБЛЕТОК<br><span class="zbt-line2">ОТ ДИАГНОЗА К ПРОФЕССИИ</span></h1>
+        <div class="zbt-hero-divider"></div>
+        <p class="zbt-hero-sub">Три дня, за которые вы поймёте, почему вам плохо и что делать с питанием. А ещё — как тысячи людей превращают знания о здоровье в профессию с доходом от $800 до $5 000 в месяц из любой точки мира.</p>
+        <a href="#zbt-reg" class="zbt-cta" data-zbt-reg>Забрать место + 6 подарков</a>
+      </div>
+      <div class="zbt-hero-illustration">
+        <svg viewBox="0 0 280 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Иллюстрация тела и организма">
+          <defs>
+            <linearGradient id="zbtBodyGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#f5d5d5" stop-opacity="0.6"/><stop offset="100%" stop-color="#d4eaf7" stop-opacity="0.6"/></linearGradient>
+            <linearGradient id="zbtOrganGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#e0627a" stop-opacity="0.3"/><stop offset="100%" stop-color="#7bbde0" stop-opacity="0.3"/></linearGradient>
+            <linearGradient id="zbtGlowGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#e0627a" stop-opacity="0.15"/><stop offset="100%" stop-color="#7bbde0" stop-opacity="0.15"/></linearGradient>
+          </defs>
+          <circle cx="140" cy="160" r="130" fill="url(#zbtGlowGrad)"/>
+          <path d="M140 30 C140 30 120 28 115 35 C110 42 112 55 112 55 L108 75 C95 80 75 95 70 115 C65 135 68 155 70 170 C72 185 70 210 72 230 C74 250 78 270 82 285 C84 292 90 295 95 295 L115 295 C120 295 122 290 122 285 L125 240 C125 240 128 235 140 235 C152 235 155 240 155 240 L158 285 C158 290 160 295 165 295 L185 295 C190 295 196 292 198 285 C202 270 206 250 208 230 C210 210 208 185 210 170 C212 155 215 135 210 115 C205 95 185 80 172 75 L168 55 C168 55 170 42 165 35 C160 28 140 30 140 30 Z" fill="url(#zbtBodyGrad)" stroke="#d4878f" stroke-width="1.5" stroke-opacity="0.4"/>
+          <circle cx="140" cy="30" r="22" fill="url(#zbtBodyGrad)" stroke="#d4878f" stroke-width="1.5" stroke-opacity="0.4"/>
+          <ellipse cx="132" cy="130" rx="22" ry="18" fill="url(#zbtOrganGrad)" stroke="#e0627a" stroke-width="1" stroke-opacity="0.4"/>
+          <path d="M125 150 Q115 160 120 170 Q130 180 140 175 Q150 170 145 180 Q135 190 125 185 Q115 180 120 190 Q130 200 140 195 Q150 190 155 200" fill="none" stroke="#7bbde0" stroke-width="3" stroke-opacity="0.4" stroke-linecap="round"/>
+          <path d="M100 120 L100 190 Q100 210 120 210 L160 210 Q175 210 175 195 L175 150" fill="none" stroke="#d4878f" stroke-width="3" stroke-opacity="0.3" stroke-linecap="round"/>
+          <path d="M148 95 C148 90 155 85 160 90 C165 85 172 90 172 95 C172 105 160 112 160 112 C160 112 148 105 148 95 Z" fill="#e0627a" fill-opacity="0.25" stroke="#e0627a" stroke-width="1" stroke-opacity="0.4"/>
+          <circle cx="50" cy="80" r="6" fill="#7bbde0" opacity="0.3"/><circle cx="230" cy="100" r="8" fill="#f5d5d5" opacity="0.5"/><circle cx="45" cy="200" r="5" fill="#e0627a" opacity="0.2"/><circle cx="235" cy="220" r="7" fill="#d4eaf7" opacity="0.4"/><circle cx="60" cy="140" r="4" fill="#d4878f" opacity="0.25"/><circle cx="220" cy="170" r="5" fill="#7bbde0" opacity="0.25"/>
+          <path d="M45 250 Q55 235 65 250 Q55 255 45 250 Z" fill="#68a89a" opacity="0.3"/><path d="M215 60 Q225 48 235 60 Q225 65 215 60 Z" fill="#68a89a" opacity="0.25"/>
+        </svg>
+      </div>
+    </div>
+    <div class="zbt-hero-meta">
+      <div class="zbt-hero-meta-item"><div class="zbt-hero-meta-icon">📅</div> 20–22 июля · 18:00 МСК</div>
+      <div class="zbt-hero-meta-item"><div class="zbt-hero-meta-icon">🎥</div> Прямой эфир</div>
+      <div class="zbt-hero-meta-item"><div class="zbt-hero-meta-icon">🎁</div> 6 подарков</div>
+    </div>
+  </section>
+
+  <div class="zbt-container">
+
+    <section class="zbt-section zbt-section--border">
+      <div class="zbt-hook">
+        <div class="zbt-hook-question">Вы знаете про омегу, магний, пробиотики, 10 000 шагов и 8 часов сна. Перепробовали спирулину, коллаген, куркумин.</div>
+        <p class="zbt-hook-text">И при этом — вздутие каждый вечер. Энергии нет. Вес стоит. Утром разбитые.</p>
+        <p class="zbt-hook-text"><span class="zbt-hook-hl">Почему?</span> Потому что знания без системы — это деньги и энергия в никуда.</p>
+        <p class="zbt-hook-text"><span class="zbt-hook-hl">За три дня мы покажем систему.</span> И, возможно, это станет началом чего-то большего.</p>
+      </div>
+    </section>
+
+    <section class="zbt-section zbt-section--border">
+      <div class="zbt-eyebrow">Для кого</div>
+      <h2 class="zbt-title">Приходите, если хотя бы одно — про вас</h2>
+      <div class="zbt-list">
+        <div class="zbt-list-item"><div class="zbt-check">✓</div><div class="zbt-list-text">Здоровье для вас — реальная ценность, не тост на празднике. Хотите разобраться по-настоящему</div></div>
+        <div class="zbt-list-item"><div class="zbt-check">✓</div><div class="zbt-list-text">Перепробовали диеты, витамины, врачей — ничего не помогло. «Анализы в норме», а вам плохо</div></div>
+        <div class="zbt-list-item"><div class="zbt-check">✓</div><div class="zbt-list-text">Хотите транслировать здоровье, молодость, красоту — и мотивировать других быть здоровыми</div></div>
+        <div class="zbt-list-item"><div class="zbt-check">✓</div><div class="zbt-list-text">Живёте в нестабильное время — хотите зарабатывать удалённо, из любой точки мира</div></div>
+        <div class="zbt-list-item"><div class="zbt-check">✓</div><div class="zbt-list-text">Хотите зарабатывать на том, что близко — помогать людям и получать благодарности</div></div>
+        <div class="zbt-list-item"><div class="zbt-check">✓</div><div class="zbt-list-text">Вы тренер, врач или специалист — хотите добавить нутрициологию и кратно увеличить доход</div></div>
+      </div>
+    </section>
+
+    <section class="zbt-section zbt-section--border">
+      <div class="zbt-eyebrow">Два результата за три дня</div>
+      <h2 class="zbt-title">Восстановите здоровье — и узнайте, как на этом зарабатывают</h2>
+      <div class="zbt-dual">
+        <div class="zbt-dual-card zbt-dual-card--blush">
+          <svg viewBox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="22" fill="#fce8e8"/><path d="M24 14 C24 10 32 10 32 16 C32 24 24 28 24 28 C24 28 16 24 16 16 C16 10 24 10 24 14 Z" fill="#e0627a" opacity="0.4"/></svg>
+          <div class="zbt-dual-card-title">Для вашего здоровья</div>
+          <div class="zbt-dual-card-desc">Поймёте, почему вам плохо, хотя «анализы в норме». Получите конкретные инструменты: правильная тарелка, работающие добавки, карта симптомов. Начнёте восстановление прямо во время марафона.</div>
+        </div>
+        <div class="zbt-dual-card zbt-dual-card--sky">
+          <svg viewBox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg"><circle cx="24" cy="24" r="22" fill="#e8f4fc"/><path d="M14 30 L20 22 L28 26 L36 14" fill="none" stroke="#4a9cc9" stroke-width="2.5" stroke-linecap="round"/><circle cx="36" cy="14" r="3" fill="#7bbde0"/></svg>
+          <div class="zbt-dual-card-title">Для вашей карьеры и дохода</div>
+          <div class="zbt-dual-card-desc">Узнаете, как люди зарабатывают от $800 до $5 000 в месяц на нутрициологии. Попробуете себя в роли нутрициолога на реальном кейсе. Поймёте, подходит ли вам это — и как начать.</div>
+        </div>
+      </div>
+      <div class="zbt-proof">
+        <div class="zbt-proof-item"><div class="zbt-proof-value">$800–5 000</div><div class="zbt-proof-label">в месяц зарабатывают нутрициологи удалённо</div></div>
+        <div class="zbt-proof-sep"></div>
+        <div class="zbt-proof-item"><div class="zbt-proof-value">Удалённо</div><div class="zbt-proof-label">из любой точки мира, свой график</div></div>
+        <div class="zbt-proof-sep"></div>
+        <div class="zbt-proof-item"><div class="zbt-proof-value">$400+ млрд</div><div class="zbt-proof-label">мировой рынок, дефицит специалистов</div></div>
+      </div>
+    </section>
+
+    <section class="zbt-section zbt-section--border">
+      <div class="zbt-eyebrow">Программа</div>
+      <h2 class="zbt-title">Три вечера: разобраться в теле, увидеть систему, войти в профессию</h2>
+
+      <div class="zbt-day zbt-day--1">
+        <div class="zbt-day-top">
+          <div class="zbt-day-illustration zbt-day-illustration--1">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Диагностика"><circle cx="42" cy="45" r="25" fill="none" stroke="#d4878f" stroke-width="2" opacity="0.5"/><line x1="60" y1="63" x2="78" y2="81" stroke="#d4878f" stroke-width="3" stroke-linecap="round" opacity="0.5"/><circle cx="42" cy="35" r="6" fill="#f5d5d5"/><rect x="36" y="42" width="12" height="18" rx="4" fill="#fce8e8"/><circle cx="30" cy="50" r="2.5" fill="#e0627a" opacity="0.5"/><circle cx="54" cy="40" r="2.5" fill="#e0627a" opacity="0.5"/><circle cx="38" cy="58" r="2.5" fill="#e0627a" opacity="0.5"/></svg>
+          </div>
+          <div class="zbt-day-head">
+            <div class="zbt-day-label">День 1</div>
+            <div class="zbt-day-date">20 июля, 18:00 МСК</div>
+            <h3 class="zbt-day-title">Почему мы болеем: организм — единое целое, а не набор отдельных органов</h3>
+          </div>
+        </div>
+        <div class="zbt-day-body">
+          <div class="zbt-day-hook">Медицина блестяще объясняет, КАК устроена болезнь — вплоть до молекул. Но почти никогда не отвечает на главный вопрос: ПОЧЕМУ она возникла именно у вас. За вечер вы увидите, где искать ответ — и это меняет взгляд на здоровье навсегда.</div>
+          <ul class="zbt-day-points">
+            <li>Почему у нас нет «инструкции» к собственному телу — и с чего начать её собирать</li>
+            <li>Медицина отвечает, «как» болезнь устроена, а нутрициология и натуропатия — «почему» она возникла. Именно с «почему» начинается восстановление</li>
+            <li>Главное открытие вечера: ни один орган не работает сам по себе. Варикоз — не про вены, мигрень — не про голову, щитовидка — не про шею. Это всегда про весь организм</li>
+            <li>Живой пример на эфире: как по симптомам увидеть, где на самом деле сбой</li>
+            <li>Почему это знание нужно каждому — маме, тренеру, врачу, предпринимателю — как инструкция к здоровой жизни, даже если вы не собираетесь быть нутрициологом</li>
+          </ul>
+          <div class="zbt-day-gift zbt-day-gift--1"><div class="zbt-day-gift-icon">🎁</div><div><div class="zbt-day-gift-title">Подарок: «Карта симптомов: 30 сигналов тела»</div><div class="zbt-day-gift-desc">PDF-гайд — какие жалобы связаны с какими дефицитами. Инструмент, которым пользуются нутрициологи</div></div></div>
+        </div>
+      </div>
+
+      <div class="zbt-day zbt-day--2">
+        <div class="zbt-day-top">
+          <div class="zbt-day-illustration zbt-day-illustration--2">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Питание"><ellipse cx="50" cy="55" rx="35" ry="28" fill="none" stroke="#7bbde0" stroke-width="1.5" opacity="0.4"/><ellipse cx="50" cy="55" rx="30" ry="24" fill="#e8f4fc"/><circle cx="38" cy="48" r="8" fill="#68a89a" opacity="0.4"/><ellipse cx="58" cy="48" rx="10" ry="7" fill="#f5d5d5"/><rect x="40" y="58" width="16" height="10" rx="3" fill="#fce8e8"/><rect x="72" y="30" width="16" height="8" rx="4" fill="#d4878f" opacity="0.4"/><path d="M15 50 L20 55 L28 43" fill="none" stroke="#68a89a" stroke-width="2" stroke-linecap="round" opacity="0.5"/></svg>
+          </div>
+          <div class="zbt-day-head">
+            <div class="zbt-day-label">День 2</div>
+            <div class="zbt-day-date">21 июля, 18:00 МСК</div>
+            <h3 class="zbt-day-title">Еда как лекарство: как собирается питание, которым правда можно восстанавливаться</h3>
+          </div>
+        </div>
+        <div class="zbt-day-body">
+          <div class="zbt-day-hook">Дело не в списке «полезных продуктов». Даже у самого природного продукта есть свойства, которые наполняют, и те, что забирают энергию. Вы увидите, как нутрициолог собирает питание под конкретного человека — а не выдаёт одно меню на всех.</div>
+          <ul class="zbt-day-points">
+            <li>Что такое питание, которым можно восстанавливаться: продукты, которые дают энергию, и продукты, которые её забирают</li>
+            <li>5 шагов работы нутрициолога: как из жалоб, образа жизни и анализов собрать единую картину и подобрать то, что подходит именно этому телу</li>
+            <li>Почему километровые схемы добавок не работают: когда БАД превращают в лекарство, специалист просто лечит симптом — как и не думающий врач</li>
+            <li>Почему рынку нужен не «ещё один нутрициолог», а тот, кто умеет мыслить системно и видеть картину целиком</li>
+            <li>Первая ступень профессии — консультант по питанию: не «выдать меню», а научить человека собирать тарелку и слышать реакции своего тела</li>
+            <li>Где брать первых клиентов и как провести первую консультацию</li>
+          </ul>
+          <div class="zbt-day-gift zbt-day-gift--2"><div class="zbt-day-gift-icon">🎁</div><div><div class="zbt-day-gift-title">Подарок: «Антивоспалительная тарелка + меню на 3 дня» + «Как найти первых 5 клиентов»</div><div class="zbt-day-gift-desc">Конкретный рацион для себя + пошаговый план выхода на первые консультации</div></div></div>
+        </div>
+      </div>
+
+      <div class="zbt-day zbt-day--3">
+        <div class="zbt-day-top">
+          <div class="zbt-day-illustration zbt-day-illustration--3">
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Профессия"><path d="M35 20 Q50 30 35 40 Q20 50 35 60 Q50 70 35 80" fill="none" stroke="#d4878f" stroke-width="1.5" opacity="0.4"/><path d="M50 20 Q35 30 50 40 Q65 50 50 60 Q35 70 50 80" fill="none" stroke="#7bbde0" stroke-width="1.5" opacity="0.4"/><circle cx="72" cy="35" r="8" fill="#fce8e8" stroke="#d4878f" stroke-width="1" opacity="0.5"/><circle cx="82" cy="50" r="6" fill="#e8f4fc" stroke="#7bbde0" stroke-width="1" opacity="0.5"/><circle cx="68" cy="55" r="5" fill="#fce8e8" stroke="#d4878f" stroke-width="1" opacity="0.4"/></svg>
+          </div>
+          <div class="zbt-day-head">
+            <div class="zbt-day-label">День 3</div>
+            <div class="zbt-day-date">22 июля, 18:00 МСК</div>
+            <h3 class="zbt-day-title">Тренды, антивозраст и профессия, которая начинается с вас самих</h3>
+          </div>
+        </div>
+        <div class="zbt-day-body">
+          <div class="zbt-day-hook">Индустрия БАДов растёт бешено — а люди как болели, так и болеют. Потому что специалистов, которые мыслят системно, а не «симптом → добавка», единицы. Вы увидите, как стать именно таким — и почему нутрициолог всегда сам себе лучшая витрина.</div>
+          <ul class="zbt-day-points">
+            <li>Что реально работает в антивозрасте: пептиды и современные подходы — простым языком, без хайпа</li>
+            <li>Почему «болячка → добавка» — тупик, и что делает системный специалист вместо этого</li>
+            <li>Продукт своего продукта: нутрициолог сначала восстанавливает себя — выглядит моложе, живёт энергичнее — и это лучшая реклама профессии</li>
+            <li>Путь развития: от заботы о себе → к обучению людей → к коллаборациям и собственным марафонам</li>
+            <li>Как хороший нутрициолог работает в связке с врачами, косметологами, тренерами — и усиливает результат каждого</li>
+            <li>Как на этом зарабатывать — честно, по шагам, из любой точки мира</li>
+          </ul>
+          <div class="zbt-day-gift zbt-day-gift--3"><div class="zbt-day-gift-icon">🎁</div><div><div class="zbt-day-gift-title">Подарок: «Что реально работает в антивозрасте: пептиды и не только»</div><div class="zbt-day-gift-desc">Разбор современных подходов простым языком + как отличить рабочее от хайпа</div></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="zbt-section zbt-section--border">
+      <div class="zbt-eyebrow">От здоровья — к профессии</div>
+      <h2 class="zbt-title">Как из желания разобраться со своим здоровьем вырастает профессия</h2>
+      <p class="zbt-lead">Почти все приходят просто разобраться с собой: усталость, вес, гормоны, кишечник. А потом ловят себя на мысли: «Я ведь уже понимаю больше, чем многие. Этим можно помогать другим — и зарабатывать». Вот как выглядит этот путь. Спокойно, по шагам, с нуля.</p>
+      <div class="zbt-list">
+        <div class="zbt-list-item"><div class="zbt-check">1</div><div class="zbt-list-text"><b>Разбираетесь в себе и семье.</b> Почему усталость, вес, сон и гормоны ведут себя именно так — и что с этим делать</div></div>
+        <div class="zbt-list-item"><div class="zbt-check">2</div><div class="zbt-list-text"><b>Учитесь видеть связи.</b> Не «железо низкое», а почему оно снижается. Не «вздутие», а что за ним стоит</div></div>
+        <div class="zbt-list-item"><div class="zbt-check">3</div><div class="zbt-list-text"><b>Пробуете консультировать.</b> Как задавать вопросы, объяснять просто и давать понятные первые шаги</div></div>
+        <div class="zbt-list-item"><div class="zbt-check">4</div><div class="zbt-list-text"><b>Берёте первых клиентов.</b> Сначала простые запросы, потом сопровождение — сначала знакомые, потом по рекомендациям</div></div>
+        <div class="zbt-list-item"><div class="zbt-check">5</div><div class="zbt-list-text"><b>Выходите на устойчивость.</b> Доход появляется, когда есть навык и доверие — а не наоборот</div></div>
+      </div>
+      <div class="zbt-note">Не нужно медицинского образования и не нужно знать всё сразу. Нужно начать — а дальше система ведёт вас шаг за шагом. Именно с этого пути и начинается марафон.</div>
+    </section>
+
+    <section class="zbt-section zbt-section--border">
+      <div class="zbt-nums">
+        <div class="zbt-num"><div class="zbt-num-value">3 500+</div><div class="zbt-num-label">прошли программы Марины</div></div>
+        <div class="zbt-num"><div class="zbt-num-value">7 лет</div><div class="zbt-num-label">практики и протоколов</div></div>
+        <div class="zbt-num"><div class="zbt-num-value">+276%</div><div class="zbt-num-label">рост профессии за 20 лет</div></div>
+      </div>
+    </section>
+
+    <section class="zbt-section">
+      <div class="zbt-eyebrow">Спикер</div>
+      <div class="zbt-speaker">
+        <div class="zbt-speaker-photo">МЖ</div>
+        <div>
+          <div class="zbt-speaker-name">Марина Жигульская</div>
+          <div class="zbt-speaker-role">Нутрициолог · Основатель школы «Ресурс»</div>
+          <p class="zbt-speaker-bio">В 45 лет получила диагноз и решила разобраться сама. За 7 лет — от пациента до эксперта с 3 500+ учениками. Сегодня ей 54, и это лучшие годы её жизни. Живёт и работает из любой точки мира.</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- BONUSES -->
+  <section class="zbt-bonus">
+    <div class="zbt-bonus-inner">
+      <h2 class="zbt-bonus-title">Зарегистрируйтесь — получите <em>сразу</em></h2>
+      <div class="zbt-bonus-grid">
+        <div class="zbt-bonus-card">
+          <div class="zbt-bonus-card-illust"><svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="48" height="48" rx="12" fill="#fce8e8"/><circle cx="28" cy="24" r="10" fill="none" stroke="#d4878f" stroke-width="1.5" opacity="0.6"/><path d="M20 36 L28 32 L36 36 L28 40 Z" fill="#d4878f" opacity="0.3"/><text x="28" y="27" text-anchor="middle" font-size="10" fill="#e0627a" font-family="Inter" font-weight="700">?</text></svg></div>
+          <div><div class="zbt-bonus-card-name">Тест: насколько вы метаболически здоровы?</div><div class="zbt-bonus-card-desc">10 вопросов — узнаете зону риска и с чего начинать.</div><div class="zbt-bonus-card-tag">Мгновенный результат</div></div>
+        </div>
+        <div class="zbt-bonus-card">
+          <div class="zbt-bonus-card-illust"><svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="48" height="48" rx="12" fill="#e8f4fc"/><path d="M16 38 L24 28 L32 32 L40 18" fill="none" stroke="#7bbde0" stroke-width="2" stroke-linecap="round"/><circle cx="40" cy="18" r="3" fill="#4a9cc9"/></svg></div>
+          <div><div class="zbt-bonus-card-name">Дорожная карта: нутрициолог с нуля за 90 дней</div><div class="zbt-bonus-card-desc">Что изучить, где первые клиенты, как не бояться начать.</div><div class="zbt-bonus-card-tag">PDF-чек-лист</div></div>
+        </div>
+        <div class="zbt-bonus-card">
+          <div class="zbt-bonus-card-illust"><svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="48" height="48" rx="12" fill="#fce8e8"/><circle cx="20" cy="24" r="6" fill="#f5d5d5" stroke="#d4878f" stroke-width="1" opacity="0.6"/><circle cx="36" cy="20" r="8" fill="#e8f4fc" stroke="#7bbde0" stroke-width="1" opacity="0.6"/><circle cx="28" cy="34" r="7" fill="#fce8e8" stroke="#d4878f" stroke-width="1" opacity="0.5"/><text x="28" y="37" text-anchor="middle" font-size="7" fill="#e0627a" font-family="Inter" font-weight="600">10</text></svg></div>
+          <div><div class="zbt-bonus-card-name">10 ниш в нутрициологии, где сейчас пусто</div><div class="zbt-bonus-card-desc">Спортивная, anti-age, ЖКТ, женское здоровье — где дефицит.</div><div class="zbt-bonus-card-tag">PDF-гайд</div></div>
+        </div>
+        <div class="zbt-bonus-card">
+          <div class="zbt-bonus-card-illust"><svg viewBox="0 0 56 56" xmlns="http://www.w3.org/2000/svg"><rect x="4" y="4" width="48" height="48" rx="12" fill="#e8f4fc"/><rect x="14" y="16" width="28" height="20" rx="4" fill="#fff" stroke="#7bbde0" stroke-width="1.5" opacity="0.6"/><polygon points="28,22 22,28 34,28" fill="#e0627a" opacity="0.4"/></svg></div>
+          <div><div class="zbt-bonus-card-name">Видео Марины: 5 ошибок в восстановлении здоровья</div><div class="zbt-bonus-card-desc">15 минут — почему всё, что пробовали, не работало.</div><div class="zbt-bonus-card-tag">Видео-урок</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REGISTRATION -->
+  <section class="zbt-reg" id="zbt-reg">
+    <div class="zbt-reg-inner">
+      <h2>Забрать место и все подарки</h2>
+      <p class="zbt-reg-sub">20–22 июля · 18:00 МСК · Бесплатно</p>
+      <div class="zbt-reg-widget">
+        <p class="zbt-reg-loading" data-zbt-reg-loading>Загружаем форму регистрации…</p>
+        <div data-zbt-reg-mount></div>
+      </div>
+      <div class="zbt-gifts">
+        <div class="zbt-gifts-title">Вы получите:</div>
+        <div class="zbt-gift-line"><span class="zbt-tag">сразу</span> Тест на метаболическое здоровье</div>
+        <div class="zbt-gift-line"><span class="zbt-tag">сразу</span> Дорожная карта нутрициолога</div>
+        <div class="zbt-gift-line"><span class="zbt-tag">сразу</span> Гайд: 10 ниш в нутрициологии</div>
+        <div class="zbt-gift-line"><span class="zbt-tag">сразу</span> Видео: 5 ошибок в восстановлении здоровья</div>
+        <div class="zbt-gift-line"><span class="zbt-tag">день 1</span> Карта симптомов: 30 сигналов тела</div>
+        <div class="zbt-gift-line"><span class="zbt-tag">день 2</span> Антивоспалительная тарелка + меню</div>
+        <div class="zbt-gift-line"><span class="zbt-tag">день 3</span> Гайд по добавкам нового поколения</div>
+      </div>
+      <p class="zbt-reg-note">Нажимая кнопку в форме, вы соглашаетесь с политикой конфиденциальности</p>
+    </div>
+  </section>
+
+  <footer class="zbt-footer">
+    <p class="zbt-footer-name">ИП Жигульская Марина Федоровна</p>
+    <p>ИНН 246521495890 · ОГРНИП 308246823300207</p>
+    <p>350028, Россия, город Краснодар, улица 40-летия Победы, 178, корпус 5, кв. 177</p>
+    <p>E-mail: <a href="mailto:ondain21@gmail.com">ondain21@gmail.com</a></p>
+    <nav class="zbt-footer-legal" aria-label="Правовые документы">
+      <a href="https://mylifemyhealth.ru/consent" target="_blank" rel="noopener noreferrer">Согласие на обработку персональных данных</a>
+      <a href="https://mylifemyhealth.ru/consent-to-mailing" target="_blank" rel="noopener noreferrer">Согласие на получение информационной и рекламной рассылки</a>
+      <a href="https://mylifemyhealth.ru/regulament" target="_blank" rel="noopener noreferrer">Регламент</a>
+      <a href="https://mylifemyhealth.ru/public-offer" target="_blank" rel="noopener noreferrer">Публичная оферта</a>
+    </nav>
+  </footer>
+
+  <div class="zbt-float" data-zbt-float data-show="false" aria-hidden="true"><a href="#zbt-reg" data-zbt-reg tabindex="-1">Забрать место + 6 подарков →</a></div>
+</div>
+
+<script>
+(function () {
+  var root = (function () {
+    var cs = document.currentScript;
+    var prev = cs && cs.previousElementSibling;
+    if (prev && prev.classList && prev.classList.contains('zbt')) return prev;
+    var all = document.querySelectorAll('.zbt');
+    return all.length ? all[all.length - 1] : null;
+  })();
+  if (!root || root.dataset.zbtInit === '1') return;
+  // Tilda re-renders a block by replacing its DOM. Tear down the previous
+  // instance's global listeners/observers before wiring the fresh root, so
+  // handlers never accumulate across editor re-renders.
+  if (typeof window.__zbtCleanup === 'function') { try { window.__zbtCleanup(); } catch (e) {} }
+  root.dataset.zbtInit = '1';
+  var observers = [];
+  var ac = (typeof AbortController !== 'undefined') ? new AbortController() : null;
+  window.__zbtCleanup = function () {
+    if (ac) ac.abort();
+    observers.forEach(function (o) { try { o.disconnect(); } catch (e) {} });
+    observers = [];
+  };
+
+  var WIDGET_ID = 'ff0f70eedeb87ec755b99934596a776993122ae5';
+  var WIDGET_SRC = 'https://iandmyhealth.ru/pl/lite/widget/script?id=1629532';
+
+  var mount = root.querySelector('[data-zbt-reg-mount]');
+  var loading = root.querySelector('[data-zbt-reg-loading]');
+  var regSection = root.querySelector('#zbt-reg');
+  var floatBar = root.querySelector('[data-zbt-float]');
+
+  // ── Ленивая загрузка виджета регистрации GetCourse ──
+  var widgetRequested = false;
+  function loadWidget() {
+    if (widgetRequested || !mount) return;
+    widgetRequested = true;
+    var script = document.createElement('script');
+    script.id = WIDGET_ID;
+    script.src = WIDGET_SRC;
+    script.addEventListener('load', function () {
+      // Виджет монтируется после DOMContentLoaded — инициируем вручную его
+      // собственным событием; он заменит себя на iframe внутри mount.
+      document.dispatchEvent(new Event('StartWidget' + WIDGET_ID));
+      if (loading) loading.style.display = 'none';
+    });
+    script.addEventListener('error', function () {
+      if (loading) loading.textContent = 'Не удалось загрузить форму. Обновите страницу.';
+    });
+    mount.appendChild(script);
+  }
+
+  // Грузим форму, когда блок регистрации приближается к экрану.
+  if (regSection && 'IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) { loadWidget(); io.disconnect(); }
+      });
+    }, { rootMargin: '400px 0px' });
+    io.observe(regSection);
+    observers.push(io);
+  } else {
+    loadWidget();
+  }
+
+  // ── CTA «Забрать место» → плавный скролл к форме + загрузка виджета ──
+  root.querySelectorAll('[data-zbt-reg]').forEach(function (link) {
+    link.addEventListener('click', function (e) {
+      e.preventDefault();
+      loadWidget();
+      if (regSection) regSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
+  // ── Плавающая кнопка: показываем после первого экрана, прячем на форме ──
+  if (floatBar && regSection) {
+    var regVisible = false;
+    if ('IntersectionObserver' in window) {
+      var floatIO = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) { regVisible = entry.isIntersecting; sync(); });
+      }, { threshold: 0.15 });
+      floatIO.observe(regSection);
+      observers.push(floatIO);
+    }
+    function sync() {
+      var passedFold = window.scrollY > window.innerHeight * 0.6;
+      var show = passedFold && !regVisible;
+      floatBar.dataset.show = show ? 'true' : 'false';
+      floatBar.setAttribute('aria-hidden', show ? 'false' : 'true');
+      var floatLink = floatBar.querySelector('a');
+      if (floatLink) { if (show) { floatLink.removeAttribute('tabindex'); } else { floatLink.setAttribute('tabindex', '-1'); } }
+    }
+    window.addEventListener('scroll', sync, ac ? { passive: true, signal: ac.signal } : { passive: true });
+    sync();
+  }
+})();
+</script>

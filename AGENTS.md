@@ -29,7 +29,7 @@
 - `src/lib/` — `motion.ts` (анимации) и `registration.ts` (integration seam).
 - `src/styles/` — глобальный Tailwind entry stylesheet.
 - `scripts/` — `validate-content.mjs` (проверка формы контента) и `smoke-container.mjs` (container smoke).
-- `tests/` — Playwright specs (44 теста на проектах `desktop-chromium` и `mobile-chromium`).
+- `tests/` — Playwright specs (64 теста на проектах `desktop-chromium` и `mobile-chromium`; включает `tilda-block.spec.ts` — регрессионные проверки standalone-блока `tilda-zbt.html`: секции/контент, отсутствие overflow на 375/1440, изоляция стилей от соседнего контента, фокус, инертность плавающего CTA, загрузка виджета один раз, юр-футер).
 - `docs/deployment/` — Dokploy runbook.
 - `node_modules/`, `.astro/`, `dist/` — generated artifacts; не редактируйте и не коммитьте.
 - `MEMORY/` — служебное состояние PAI, не продуктовый source-каталог.
@@ -133,6 +133,8 @@ docker stop zbt-2007-smoke
 - `tokens.css` — CSS variables и базовые `.btn-cta`, `.card`, `.eyebrow`, `.section-title`, `.chip` patterns; импортируется через `src/styles/global.css`.
 - `Dockerfile` / `nginx.conf` / `.dockerignore` — production container topology.
 - `docs/deployment/dokploy.md` — Dokploy runbook и последовательность HTTPS.
+- `tilda-zbt.html` — самодостаточный блок лендинга для вставки в Tilda (блок T123): весь дизайн/вёрстка/логика в одном файле, CSS изолирован под `.zbt`, inline-SVG артворк, встроенный виджет регистрации GetCourse. Альтернатива Astro-сайту для размещения в Tilda (без iframe и внешнего хостинга). Контент сверяется с текущим source (`src/content/landing.ts`, компоненты).
+- `README-TILDA.md` — инструкция по установке `tilda-zbt.html` в Tilda и его устройство.
 
 ## Runtime/Tooling Preferences
 
