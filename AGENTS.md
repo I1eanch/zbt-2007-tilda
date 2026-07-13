@@ -133,8 +133,10 @@ docker stop zbt-2007-smoke
 - `tokens.css` — CSS variables и базовые `.btn-cta`, `.card`, `.eyebrow`, `.section-title`, `.chip` patterns; импортируется через `src/styles/global.css`.
 - `Dockerfile` / `nginx.conf` / `.dockerignore` — production container topology.
 - `docs/deployment/dokploy.md` — Dokploy runbook и последовательность HTTPS.
-- `tilda-zbt.html` — самодостаточный блок лендинга для вставки в Tilda (блок T123): весь дизайн/вёрстка/логика в одном файле, CSS изолирован под `.zbt`, inline-SVG артворк, встроенный виджет регистрации GetCourse. Альтернатива Astro-сайту для размещения в Tilda (без iframe и внешнего хостинга). Контент сверяется с текущим source (`src/content/landing.ts`, компоненты).
-- `README-TILDA.md` — инструкция по установке `tilda-zbt.html` в Tilda и его устройство.
+- `tilda-zbt.html` — блок лендинга для вставки в Tilda (T123): весь дизайн/вёрстка/логика в одном файле, CSS изолирован под `.zbt` (значения из `tokens.css`), шапка-меню, встроенный виджет регистрации GetCourse. Фотографии хранятся в `tilda-assets/` этого репозитория и отдаются по прямым ссылкам через CDN jsDelivr (`cdn.jsdelivr.net/gh/<owner>/<repo>@main/tilda-assets/…`; репозиторий должен быть публичным). Контент/структура сверяются с текущими компонентами `src/` и `src/content/landing.ts`.
+- `tilda-assets/` — оптимизированные фото для `tilda-zbt.html` (генерируются из `src/assets/` через `scripts/build-tilda-assets.mjs`). `tilda-zbt.preview.html` — локальный предпросмотр (ссылки на CDN заменены на локальные файлы).
+- `README-TILDA.md` — установка `tilda-zbt.html` в Tilda и его устройство.
+- `scripts/build-tilda-assets.mjs` — оптимизатор фото для `tilda-assets/`.
 
 ## Runtime/Tooling Preferences
 
