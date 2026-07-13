@@ -11,8 +11,10 @@
 Реализованный поток (проверяется `npm run verify`):
 
 - `src/pages/index.astro` — composition root. Содержит только frontmatter-импорты и композицию 11 секций внутри `Layout.astro`, плюс `Header` (fixed nav-шапка) перед `<main>` и `StickyCTA` как fixed overlay после `<main>`. Порядок секций: `hero → hook → audience → dual-value → program → career → stats → speaker → bonuses → registration → footer`.
-- `src/layouts/Layout.astro` — владеет document metadata (title, description, canonical, Open Graph, шрифты, favicon) и единственным motion bootstrap: один framework-processed `<script>` без атрибутов (Astro бандлит его как внешний модуль, а не форсит `is:inline`), который импортирует и один раз вызывает `initLandingMotion()` из `src/lib/motion.ts` и вешает cleanup на `astro:before-swap`. Контракт проверяется ровно одной загрузкой модуля `src/lib/motion` (см. `tests/layout.spec.ts`), а не маркер-атрибутом.
+- `src/layouts/Layout.astro` — владеет document metadata (title, description, canonical, Open Graph, шрифты, favicon) и единственным client bootstrap: один framework-processed `<script>` без атрибутов (Astro бандлит его как внешний модуль), который вызывает `initLandingMotion()` (`src/lib/motion.ts`) и `initEmbedBridge()` (`src/lib/embed.ts`), затем вешает cleanup на `astro:before-swap`. Контракт «single motion bootstrap» по-прежнему проверяется ровно одной загрузкой модуля `src/lib/motion` (`tests/layout.spec.ts`). Опциональный проп `embed` включает `data-embed="true"` на `<html>`, добавляет `robots: noindex, nofollow` и опускает canonical.
 - `src/lib/motion.ts` — централизованный GSAP/ScrollTrigger init: ветка `prefers-reduced-motion` (в reduced-motion контент остаётся видимым, анимации выключены), `gsap.set()` для начального состояния, `gsap.to()` с `once: true`, очистка через `gsap.context().revert()`. Режимы `data-animate`: `reveal`/`slide-left`/`slide-right`/`scale` (анимируют контейнер) и `stagger` (каскад прямых детей). Дополнительно: count-up для `[data-count-up]` (Stats) и entrance fixed-навбара `[data-nav]`. Секционные компоненты объявляют только `data-animate`-хуки и не импортируют GSAP.
+- `src/pages/embed.astro` — вариант лендинга для встраивания в Tilda через iframe (блок T123). Те же 11 секций в том же порядке (парити с `/` проверяется в `tests/embed.spec.ts`), но без fixed site-chrome (`Header`, `StickyCTA`): в auto-resize iframe `position: fixed` не может залипать. `RegistrationModal` сохранён. Роут `noindex` и не входит в основную навигацию.
+- `src/lib/embed.ts` — мост embed↔родитель, активен только при `data-embed="true"`: постит наверх (`postMessage`) высоту документа для auto-resize iframe и состояние модалки. В embed-режиме `motion.ts` идёт по reduced-motion-ветке (контент виден, анимации выключены) — scroll-триггеры в auto-height iframe не срабатывают.
 - `src/content/landing.ts` — единственный источник повторяемого контента: типизированные `audienceItems`, `programDays`, `careerSteps`, `stats`, `bonuses`, `registrationGifts` с интерфейсами. Контент не нормализуется относительно `Maket.html`.
 - `src/components/` — одна секция на один PascalCase `.astro`-файл (`Hero`, `Hook`, `Audience`, `DualValue`, `Program`, `CareerPath`, `Stats`, `Speaker`, `Bonuses`, `Registration`, `Footer`), плюс site-chrome: `Header` (fixed nav со scrollspy и мобильным меню), `StickyCTA` и `RegistrationModal` (поповер со встроенным виджетом регистрации).
 - `src/components/ui/` — UI-примитивы (`Button`, `Card`, `SectionLabel`) без бизнес-смысла; не импортируют GSAP или marketing content.
@@ -29,7 +31,7 @@
 - `src/lib/` — `motion.ts` (анимации) и `registration.ts` (integration seam).
 - `src/styles/` — глобальный Tailwind entry stylesheet.
 - `scripts/` — `validate-content.mjs` (проверка формы контента) и `smoke-container.mjs` (container smoke).
-- `tests/` — Playwright specs (44 теста на проектах `desktop-chromium` и `mobile-chromium`).
+- `tests/` — Playwright specs (56 тестов на проектах `desktop-chromium` и `mobile-chromium`; включает `embed.spec.ts` для маршрута `/embed`, в т.ч. parent+iframe интеграционный тест T123-сниппета).
 - `docs/deployment/` — Dokploy runbook.
 - `node_modules/`, `.astro/`, `dist/` — generated artifacts; не редактируйте и не коммитьте.
 - `MEMORY/` — служебное состояние PAI, не продуктовый source-каталог.
@@ -79,7 +81,8 @@ Release-only performance gates измеряются на production preview/Ligh
 ## Production topology (Docker/nginx/Dokploy)
 
 - `Dockerfile` — multi-stage build: `node:22.22.2-alpine` собирает `dist/`, затем артефакт копируется в runtime image `nginx:alpine`, закреплённый по digest (`@sha256:...`). `HEALTHCHECK` опрашивает `/healthz`.
-- `nginx.conf` — слушает container port 80; отдаёт security headers (`X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, `X-Frame-Options: DENY`), gzip, `Cache-Control: no-cache` для `index.html`, `public, max-age=31536000, immutable` для `/_astro/`, и `/healthz` -> `200 ok`.
+- `nginx.conf.template` — envsubst-шаблон (базовый nginx-образ подставляет его при старте в `/etc/nginx/conf.d/default.conf`). Слушает container port 80; отдаёт security headers (`X-Content-Type-Options`, `Referrer-Policy`, `Permissions-Policy`, и `X-Frame-Options: DENY` на всех документах КРОМЕ `/embed/`), gzip, `Cache-Control: no-cache` для `index.html`, `public, max-age=31536000, immutable` для `/_astro/`, и `/healthz` -> `200 ok`. `/embed/` — единственный frameable-документ: без `X-Frame-Options`, с `Content-Security-Policy: frame-ancestors ${FRAME_ANCESTORS}` (детали — `docs/deployment/tilda-embed.md`).
+- `FRAME_ANCESTORS` — env для frame-ancestors на `/embed/` (дефолт в `Dockerfile` включает поддомены и apex платформы Tilda: `'self' https://*.tilda.ws https://*.tilda.cc https://*.tilda.ru https://tilda.ws https://tilda.cc https://tilda.ru`; CSP-wildcard не матчит голый хост, поэтому apex перечислены отдельно). Операторский вход: для публикации страницы Tilda на собственном домене оператор добавляет этот origin через переменную окружения (Dokploy), не редактируя файлы.
 - `.dockerignore` минимизирует build context и намеренно НЕ игнорирует `tokens.css` (его импортирует Astro build).
 - `PUBLIC_SITE_URL` — build-time arg. Локальные build/smoke используют `https://example.invalid` (зарезервировано только для smoke; никогда не выдавать за production). Production build должен получить `PUBLIC_SITE_URL=https://$PRODUCTION_DOMAIN`.
 - Dokploy разворачивает Application из Dockerfile, Traefik маршрутизирует домен на container port 80; host-порты не публикуются. HTTPS/сертификат выпускает Let's Encrypt. Точные значения и последовательность — в `docs/deployment/dokploy.md`.
@@ -131,8 +134,9 @@ docker stop zbt-2007-smoke
 - `Design.md` — визуальная философия, типографика, spacing, components и правила использования токенов.
 - `design-tokens.json` — машиночитаемые W3C design tokens.
 - `tokens.css` — CSS variables и базовые `.btn-cta`, `.card`, `.eyebrow`, `.section-title`, `.chip` patterns; импортируется через `src/styles/global.css`.
-- `Dockerfile` / `nginx.conf` / `.dockerignore` — production container topology.
+- `Dockerfile` / `nginx.conf.template` / `.dockerignore` — production container topology.
 - `docs/deployment/dokploy.md` — Dokploy runbook и последовательность HTTPS.
+- `docs/deployment/tilda-embed.md` — встраивание `/embed` в Tilda через iframe (блок T123): код сниппета, `FRAME_ANCESTORS`, поведение auto-resize и модалки.
 
 ## Runtime/Tooling Preferences
 

@@ -30,9 +30,14 @@ function groupThousands(value: number, sep: string): string {
 
 export function initLandingMotion(): () => void {
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // In the Tilda embed the iframe is auto-resized to full content height, so it
+  // never scrolls internally (the parent scrolls). ScrollTrigger reveals and the
+  // count-up would then either fire all at once or never, so we fall back to the
+  // reduced-motion path: content is rendered fully visible with no animation.
+  const embed = document.documentElement.dataset.embed === 'true';
   const elements = gsap.utils.toArray<HTMLElement>(selector);
 
-  if (reduceMotion) {
+  if (reduceMotion || embed) {
     gsap.set(elements, { clearProps: 'all' });
     return () => undefined;
   }

@@ -39,6 +39,27 @@ server {
     try_files $uri =404;
   }
 
+  # The Tilda embed endpoint is the ONLY frameable document. It intentionally
+  # drops X-Frame-Options (which cannot express a multi-origin allowlist) and
+  # relies on Content-Security-Policy: frame-ancestors as the authoritative
+  # allowlist. FRAME_ANCESTORS is an operator input, substituted at container
+  # start (see Dockerfile ENV default and docs/deployment/tilda-embed.md); the
+  # published Tilda parent origin (custom domain) must be added there. All other
+  # locations keep X-Frame-Options: DENY, so the standalone landing at / stays
+  # protected against clickjacking.
+  location = /embed {
+    return 308 /embed/;
+  }
+
+  location ^~ /embed/ {
+    add_header X-Content-Type-Options "nosniff" always;
+    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+    add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
+    add_header Content-Security-Policy "frame-ancestors ${FRAME_ANCESTORS}" always;
+    add_header Cache-Control "no-cache" always;
+    try_files $uri $uri/ =404;
+  }
+
   location / {
     try_files $uri $uri/ =404;
   }

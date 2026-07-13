@@ -94,9 +94,9 @@
       document.documentElement.style.overflow = open ? 'hidden' : '';
       if (open) {
         loadWidget();
-        closeButton.focus();
+        closeButton.focus({ preventScroll: true });
       } else if (lastTrigger) {
-        lastTrigger.focus();
+        lastTrigger.focus({ preventScroll: true });
         lastTrigger = null;
       }
     };

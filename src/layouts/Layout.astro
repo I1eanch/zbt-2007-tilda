@@ -5,23 +5,26 @@ interface Props {
   title: string;
   description: string;
   image?: string;
+  embed?: boolean;
 }
 
 const {
   title,
   description,
   image = '/og-image.svg',
+  embed = false,
 } = Astro.props;
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
 ---
 
-<html lang="ru">
+<html lang="ru" data-embed={embed ? 'true' : undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    {canonical && <link rel="canonical" href={canonical} />}
+    {!embed && canonical && <link rel="canonical" href={canonical} />}
+    {embed && <meta name="robots" content="noindex, nofollow" />}
     <meta property="og:type" content="website" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
@@ -34,14 +37,25 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
   <body>
     <slot />
     {/*
-      Single, central landing-motion bootstrap owned by the layout. Astro processes and bundles
-      this framework <script> (no attributes, so it is not forced inline), imports the motion
-      module, runs it exactly once, and wires cleanup for Astro view transitions.
+      Single, central client bootstrap owned by the layout. Astro processes and
+      bundles this framework <script> (no attributes, so it is not forced inline),
+      runs the motion init exactly once, and — on the /embed route only, via
+      initEmbedBridge's own data-embed self-gate — starts the Tilda iframe bridge
+      (auto-resize + modal fullscreen relay). Cleanup is wired for view transitions.
     */}
     <script>
       import { initLandingMotion } from '../lib/motion';
-      const cleanup = initLandingMotion();
-      document.addEventListener('astro:before-swap', cleanup, { once: true });
+      import { initEmbedBridge } from '../lib/embed';
+      const cleanupMotion = initLandingMotion();
+      const cleanupEmbed = initEmbedBridge();
+      document.addEventListener(
+        'astro:before-swap',
+        () => {
+          cleanupMotion();
+          cleanupEmbed();
+        },
+        { once: true },
+      );
     </script>
   </body>
 </html>
