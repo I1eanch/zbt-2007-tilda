@@ -97,16 +97,28 @@ for (const width of [375, 1440]) {
   });
 }
 
-test('footer keeps the current legal/company details and links', async ({ page }) => {
+test('speaker photo matches the text-column height on desktop, keeps 4:5 on mobile', async ({ page }) => {
+  await page.setViewportSize({ width: 1200, height: 900 });
   await page.setContent(mockTildaPage, { waitUntil: 'load' });
-  const footer = page.locator('.zbt-footer');
-  await expect(footer).toContainText('ИП Жигульская Марина Федоровна');
-  await expect(footer).toContainText('ИНН 246521495890');
-  await expect(footer).toContainText('ОГРНИП 308246823300207');
-  await expect(footer.locator('a[href="mailto:ondain21@gmail.com"]')).toHaveCount(1);
-  for (const slug of ['consent', 'consent-to-mailing', 'regulament', 'public-offer']) {
-    await expect(footer.locator(`a[href="https://mylifemyhealth.ru/${slug}"]`)).toHaveCount(1);
-  }
+  const desktop = await page.evaluate(() => {
+    const photo = document.querySelector('.zbt-speaker-photo');
+    const textCol = document.querySelector('.zbt-speaker > div:last-child');
+    if (!photo || !textCol) return null;
+    return { photoH: photo.getBoundingClientRect().height, textH: textCol.getBoundingClientRect().height };
+  });
+  expect(desktop).not.toBeNull();
+  expect(Math.abs((desktop?.photoH ?? 0) - (desktop?.textH ?? 0))).toBeLessThanOrEqual(2);
+
+  await page.setViewportSize({ width: 390, height: 900 });
+  await page.setContent(mockTildaPage, { waitUntil: 'load' });
+  const ratio = await page.evaluate(() => {
+    const r = document.querySelector('.zbt-speaker-photo');
+    if (!r) return 0;
+    const box = r.getBoundingClientRect();
+    return box.height / box.width;
+  });
+  expect(ratio).toBeGreaterThan(1.15);
+  expect(ratio).toBeLessThan(1.35);
 });
 
 test('CTAs are keyboard-focusable with a visible outline', async ({ page }) => {

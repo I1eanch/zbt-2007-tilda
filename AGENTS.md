@@ -29,7 +29,7 @@
 - `src/lib/` — `motion.ts` (анимации) и `registration.ts` (integration seam).
 - `src/styles/` — глобальный Tailwind entry stylesheet.
 - `scripts/` — `validate-content.mjs` (проверка формы контента) и `smoke-container.mjs` (container smoke).
-- `tests/` — Playwright specs (64 теста на проектах `desktop-chromium` и `mobile-chromium`; включает `tilda-block.spec.ts` — регрессионные проверки standalone-блока `tilda-zbt.html`: секции/контент, отсутствие overflow на 375/1440, изоляция стилей от соседнего контента, фокус, инертность плавающего CTA, загрузка виджета один раз, юр-футер).
+- `tests/` — Playwright specs (64 теста на проектах `desktop-chromium` и `mobile-chromium`; включает `tilda-block.spec.ts` — регрессионные проверки standalone-блока `tilda-zbt.html`: секции/контент, отсутствие overflow на 375/1440, изоляция стилей от соседнего контента, фокус, инертность плавающего CTA, загрузка виджета один раз, геометрия фото спикера).
 - `docs/deployment/` — Dokploy runbook.
 - `node_modules/`, `.astro/`, `dist/` — generated artifacts; не редактируйте и не коммитьте.
 - `MEMORY/` — служебное состояние PAI, не продуктовый source-каталог.
